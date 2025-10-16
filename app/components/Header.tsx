@@ -1,84 +1,167 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import Image from 'next/image';
-import { useState } from 'react';
+import Link from "next/link";
+import Image from "next/image";
+import { useEffect, useState, useMemo } from "react";
+import { usePathname } from "next/navigation";
 
 export default function Header() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const pathname = usePathname();
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 6);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
+    setMobileOpen(false);
+  }, [pathname]);
+
+  const links = useMemo(
+    () => [
+      { href: "/", label: "ANA SAYFA" },
+      { href: "/hakkimizda", label: "HAKKIMIZDA" },
+      { href: "/kulup", label: "KULÜP" },
+      { href: "/iletisim", label: "İLETİŞİM" },
+      { href: "/kayit", label: "KAYIT OL" },
+    ],
+    []
+  );
+
+  const isActive = (href: string) =>
+    href === "/" ? pathname === "/" : pathname?.startsWith(href);
 
   return (
-    <header className="bg-white shadow-md sticky top-0 z-50">
-      <div className="container mx-auto px-4">
+    <header
+      className={[
+        "sticky top-0 z-50 border-b transition-all",
+        "bg-white border-b-slate-200",
+        scrolled ? "shadow-md" : "shadow-sm",
+      ].join(" ")}
+      aria-label="Site header"
+    >
+      <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <div className="flex items-center justify-between py-3">
-          {/* Logo */}
-          <Link href="/" className="flex items-center gap-3">
-            <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center">
-              <span className="text-white font-bold text-xl">KS</span>
-            </div>
-            <div>
-              <h1 className="text-lg font-bold text-gray-800">KADIKÖY SPOR KULÜBÜ</h1>
-            </div>
+          <Link
+            href="/"
+            className="flex items-center gap-3 rounded-md focus:outline-none"
+          >
+            <Image
+              src="/images/logo.png"
+              alt="Yeni Kadıköy Spor Kulübü"
+              width={56}
+              height={56}
+              className="h-14 w-14 object-contain"
+            />
+            <span className="leading-tight">
+              <span className="block text-xl font-extrabold tracking-tight text-blue-600">
+                YENİ KADIKÖY
+              </span>
+              <span className="block text-sm font-semibold text-[#EAB308]">
+                SPOR KULÜBÜ
+              </span>
+            </span>
           </Link>
 
-          {/* Desktop Navigation */}
+          {/* Desktop Nav */}
           <nav className="hidden md:flex items-center gap-6">
-            <Link href="/" className="text-gray-700 hover:text-blue-600 font-medium transition">
-              HOME
-            </Link>
-            <Link href="/hakkimizda" className="text-gray-700 hover:text-blue-600 font-medium transition">
-              HAKKIMIZDA
-            </Link>
-            <Link href="/kulup" className="text-gray-700 hover:text-blue-600 font-medium transition">
-              KULÜP
-            </Link>
-            <Link href="/iletisim" className="text-gray-700 hover:text-blue-600 font-medium transition">
-              İLETİŞİM
-            </Link>
-            <Link 
-              href="/kayit" 
-              className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 font-medium transition"
-            >
-              KAYIT OL
-            </Link>
+            {links.map((l) => (
+              <NavLink key={l.href} href={l.href} active={isActive(l.href)}>
+                {l.label}
+              </NavLink>
+            ))}
           </nav>
 
-          {/* Mobile Menu Button */}
-          <button
-            className="md:hidden text-gray-700"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-          </button>
+          {/* Mobile: menu */}
+          <div className="md:hidden flex items-center gap-2">
+            <button
+              onClick={() => setMobileOpen((v) => !v)}
+              aria-label="Menüyü aç/kapat"
+              className="inline-flex h-10 w-10 items-center justify-center rounded-lg text-slate-900 hover:bg-slate-100 transition focus:outline-none focus:ring-2 focus:ring-[#FACC15]"
+            >
+              <svg
+                className="h-6 w-6"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                {mobileOpen ? (
+                  <path d="M6 18L18 6M6 6l12 12" />
+                ) : (
+                  <>
+                    <path d="M3 6h18" />
+                    <path d="M3 12h18" />
+                    <path d="M3 18h18" />
+                  </>
+                )}
+              </svg>
+            </button>
+          </div>
         </div>
 
         {/* Mobile Menu */}
-        {mobileMenuOpen && (
-          <nav className="md:hidden pb-4 flex flex-col gap-3">
-            <Link href="/" className="text-gray-700 hover:text-blue-600 font-medium">
-              HOME
-            </Link>
-            <Link href="/hakkimizda" className="text-gray-700 hover:text-blue-600 font-medium">
-              HAKKIMIZDA
-            </Link>
-            <Link href="/kulup" className="text-gray-700 hover:text-blue-600 font-medium">
-              KULÜP
-            </Link>
-            <Link href="/iletisim" className="text-gray-700 hover:text-blue-600 font-medium">
-              İLETİŞİM
-            </Link>
-            <Link 
-              href="/kayit" 
-              className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 font-medium text-center"
-            >
-              KAYIT OL
-            </Link>
+        <div
+          className={[
+            "md:hidden overflow-hidden transition-[max-height,opacity] duration-300 ease-out",
+            mobileOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0",
+          ].join(" ")}
+        >
+          <nav className="mb-3 grid gap-2 rounded-2xl border border-slate-200 bg-slate-50 p-3 shadow-lg">
+            {links.map((l) => (
+              <Link
+                key={l.href}
+                href={l.href}
+                className={[
+                  "rounded-lg px-4 py-2 font-semibold transition",
+                  "hover:bg-slate-100",
+                  isActive(l.href) ? "text-slate-900 bg-yellow-50" : "text-slate-700",
+                ].join(" ")}
+              >
+                {l.label}
+              </Link>
+            ))}
           </nav>
-        )}
+        </div>
       </div>
     </header>
   );
 }
 
+function NavLink({
+  href,
+  active,
+  children,
+}: {
+  href: string;
+  active?: boolean;
+  children: React.ReactNode;
+}) {
+  return (
+    <Link
+      href={href}
+      className={[
+        "group relative font-semibold transition focus:outline-none",
+        active ? "text-slate-900" : "text-slate-700 hover:text-slate-900",
+      ].join(" ")}
+    >
+      <span className="px-1.5 py-1">{children}</span>
+      {/* underline */}
+      <span
+        aria-hidden
+        className={[
+          "pointer-events-none absolute -bottom-1 left-0 h-[2px] w-full origin-left scale-x-0",
+          "bg-gradient-to-r from-[#EAB308] via-[#FACC15] to-[#0a0f58]",
+          "transition-transform duration-300",
+          active ? "scale-x-100" : "group-hover:scale-x-100",
+        ].join(" ")}
+      />
+    </Link>
+  );
+}
