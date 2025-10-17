@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import SponsorSidebar from '@/app/components/SponsorSidebar';
+import SponsorSidebar from '@/app/components/common/SponsorSidebar';
 import HeroBand from '@/app/components/sections/HeroBand';
 import CTAButton from '@/app/components/ui/CTAButton';
 

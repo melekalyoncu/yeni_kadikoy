@@ -131,3 +131,4 @@ function isEmoji(val?: string) {
   if (!val) return false;
   return /\p{Extended_Pictographic}/u.test(val);
 }
+

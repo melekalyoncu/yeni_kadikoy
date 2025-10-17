@@ -1,6 +1,6 @@
 import Link from 'next/link';
-import SponsorSidebar from '@/app/components/SponsorSidebar';
-
+import SponsorSidebar from '@/app/components/common/SponsorSidebar';
+import HeroBand from '@/app/components/sections/HeroBand';
 export default function HaberlerPage() {
   const allNews = [
     {
@@ -56,14 +56,11 @@ export default function HaberlerPage() {
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
-      <div className="bg-gradient-to-r from-slate-800 to-slate-700 text-white py-20 border-b border-slate-600">
-        <div className="container mx-auto px-4 text-center">
-          <h1 className="text-5xl font-bold mb-4">HABERLER</h1>
-          <p className="text-lg max-w-2xl mx-auto text-slate-300">
-            Kulübümüzden Son Haberler ve Gelişmeler
-          </p>
-        </div>
-      </div>
+      <HeroBand
+        pill="Haberler • Gündem"
+        title="HABERLER"
+        subtitle="Kulübümüzden Son Haberler ve Gelişmeler"
+      />
 
       {/* Main Content */}
       <div className="container mx-auto px-4 py-12">

@@ -25,7 +25,7 @@ export default function Header() {
     () => [
       { href: "/", label: "ANA SAYFA" },
       { href: "/hakkimizda", label: "HAKKIMIZDA" },
-      { href: "/kulup", label: "KULÜP" },
+      { href: "/haberler", label: "HABERLER" },
       { href: "/iletisim", label: "İLETİŞİM" },
       { href: "/kayit", label: "KAYIT OL" },
     ],
@@ -165,3 +165,4 @@ function NavLink({
     </Link>
   );
 }
+

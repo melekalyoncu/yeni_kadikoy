@@ -2,8 +2,8 @@
 
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import HeroSlider from './components/HeroSlider';
-import SponsorSidebar from './components/SponsorSidebar';
+import HeroSlider from './components/sections/HeroSlider';
+import SponsorSidebar from './components/common/SponsorSidebar';
 
 // --- Animasyon preset ---
 const fadeUp = {

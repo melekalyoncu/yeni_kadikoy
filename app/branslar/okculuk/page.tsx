@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import SponsorSidebar from '@/app/components/SponsorSidebar';
+import SponsorSidebar from '@/app/components/common/SponsorSidebar';
 
 export default function OkculukPage() {
   const teams = [

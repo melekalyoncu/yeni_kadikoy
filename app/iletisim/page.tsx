@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import SponsorSidebar from '@/app/components/SponsorSidebar';
+import SponsorSidebar from '@/app/components/common/SponsorSidebar';
 import HeroBand from '@/app/components/sections/HeroBand';
 import GridShell from '@/app/components/layout/GridShell';
 
