@@ -24,7 +24,7 @@ export default function SponsorSidebar() {
           <h3 className="text-xs font-bold  uppercase tracking-wider text-blue-600 ">
             Sponsorlarımız
           </h3>
-          <span className="h-[3px] w-20 rounded-full bg-gradient-to-r from-[#EAB308] via-[#FACC15] to-[#0a0f58]" />
+          <span className="h-[3px] w-20 rounded-full bg-gradient-to-r from-[#facc15] via-[#f59e0b] to-[#ea580c]" />
         </header>
 
         <div className="p-5">

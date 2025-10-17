@@ -2,12 +2,9 @@
 @import "tailwindcss";
 
 :root {
-  /* Logo Colors */
-  --primary-blue: #0047ab;      /* Royal Blue */
-  --primary-yellow: #ffd700;    /* Gold */
-  --secondary-blue: #0056d2;
-  --dark-blue: #003580;
-  --light-blue: #f0f7ff;
+  --primary-blue: #2563eb;    
+  --secondary-blue: #1e3a8a;   
+  --primary-yellow: #eab308; 
 
   /* Neutral Colors */
   --background: #fafbfc;
@@ -25,7 +22,10 @@
   --accent-red: #ef4444;
 }
 
-/* Tek tema: dark bloğunu kaldırdık */
+@keyframes shine {
+  0%   { transform: translateX(-120%); }
+  100% { transform: translateX(120%); }
+}
 
 /* Smooth transitions for background/text */
 html { transition: background-color .3s ease; }

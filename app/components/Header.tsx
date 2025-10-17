@@ -157,7 +157,7 @@ function NavLink({
         aria-hidden
         className={[
           "pointer-events-none absolute -bottom-1 left-0 h-[2px] w-full origin-left scale-x-0",
-          "bg-gradient-to-r from-[#EAB308] via-[#FACC15] to-[#0a0f58]",
+          "bg-gradient-to-r from-[#facc15] via-[#f59e0b] to-[#ea580c]",
           "transition-transform duration-300",
           active ? "scale-x-100" : "group-hover:scale-x-100",
         ].join(" ")}

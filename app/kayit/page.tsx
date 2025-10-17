@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import SponsorSidebar from '@/app/components/SponsorSidebar';
+import HeroBand from '@/app/components/sections/HeroBand';
+import CTAButton from '@/app/components/ui/CTAButton';
 
 export default function KayitPage() {
   const [formData, setFormData] = useState({
@@ -40,25 +42,21 @@ export default function KayitPage() {
 
   return (
     <div className="min-h-screen bg-white text-slate-800">
-      {/* HERO — kompakt, marka mavisi + sarı vurgu */}
-      <section
-        className="text-white border-b"
-        style={{
-          background: `linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%)`,
-          borderColor: 'rgba(0,0,0,.15)',
-        }}
-      >
-        <div className="mx-auto w-full max-w-screen-xl px-4 py-10 md:py-12 text-center">
-          <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight mb-2">KAYIT OL</h1>
-          <p className="text-sm md:text-base opacity-90 max-w-2xl mx-auto">
-            Kadıköy Spor Kulübü ailesine katılın, spor yolculuğunuza başlayın
-          </p>
-          <div
-            className="mt-5 mx-auto h-1 w-20 rounded-full"
-            style={{ background: 'var(--primary-yellow)' }}
-          />
-        </div>
-      </section>
+      <HeroBand
+        pill="Kayıt • 2025 Dönemi"
+        title="KAYIT OL"
+        subtitle="Modern tesislerde profesyonel eğitim."
+        actions={
+          <>
+            <CTAButton href="/kayit" variant="primary" size="md">
+              KAYIT OL
+            </CTAButton>
+            <CTAButton href="/iletisim" variant="secondary" size="md">
+              BİLGİ AL
+            </CTAButton>
+          </>
+        }
+      />
 
       {/* DIŞ SARMA: tam genişlik + 12 kolon GRID */}
       <div className="w-full py-12 md:py-16">
