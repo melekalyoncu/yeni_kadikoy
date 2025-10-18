@@ -196,20 +196,47 @@ export default function Home() {
 
               {/* Branşlar */}
               <section>
-                <SectionHeader title="Branşlarımız" subtitle="Profesyonel antrenörlerimiz eşliğinde üç farklı branşta eğitim veriyoruz" />
-                <motion.div initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.2 }} className="grid md:grid-cols-3 gap-6 md:gap-8">
-                  <BranchCard href="/branslar/voleybol" title="Voleybol" stats="4 yaş grubu • 100+ sporcu" emoji="🏐" gradient="bg-gradient-to-br from-[#ea580c] to-[#c2410c]" />
-                  <BranchCard href="/branslar/basketbol" title="Basketbol" stats="4 yaş grubu • 120+ sporcu" emoji="🏀" gradient="bg-gradient-to-br from-[#ea580c] to-[#7c2d12]" />
-                  <BranchCard href="/branslar/okculuk" title="Okçuluk" stats="4 yaş grubu • 80+ sporcu" emoji="🎯" gradient="bg-gradient-to-br from-[#16a34a] to-[#065f46]" />
+                <SectionHeader
+                  title="Branşlarımız"
+                  subtitle="Profesyonel antrenörlerimiz eşliğinde üç farklı branşta eğitim veriyoruz"
+                />
+                <motion.div
+                  initial="hidden"
+                  whileInView="show"
+                  viewport={{ once: true, amount: 0.2 }}
+                  className="grid md:grid-cols-3 gap-6 md:gap-8"
+                >
+                  <BranchCard
+                    href="/branslar/voleybol"
+                    title="Voleybol"
+                    stats="4 yaş grubu • 100+ sporcu"
+                    emoji="🏐"
+                    gradient="bg-gradient-to-br from-[#EAB308] to-[#FACC15]"
+                  />
+                  <BranchCard
+                    href="/branslar/basketbol"
+                    title="Basketbol"
+                    stats="4 yaş grubu • 120+ sporcu"
+                    emoji="🏀"
+                    gradient="bg-gradient-to-br from-[#ea580c] to-[#7c2d12]"
+                  />
+                  <BranchCard
+                    href="/branslar/okculuk"
+                    title="Okçuluk"
+                    stats="4 yaş grubu • 80+ sporcu"
+                    emoji="🎯"
+                    gradient="bg-gradient-to-br from-[#16a34a] to-[#065f46]"
+                  />
                 </motion.div>
               </section>
+
             </div>
 
           </main>
 
           {/* Sağ Sponsor */}
           <aside className="lg:col-span-2 px-4">
-              <SponsorSidebar />
+            <SponsorSidebar />
           </aside>
         </div>
       </div>
