@@ -9,14 +9,16 @@ const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"], dis
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"], display: "swap" });
 
 export const metadata: Metadata = {
-  title: "Kadıköy Spor Kulübü",
-  description: "Kadıköy Spor Kulübü - Voleybol, Basketbol, Okçuluk",
-  openGraph: {
-    title: "Kadıköy Spor Kulübü",
-    description: "Voleybol, Basketbol ve Okçulukta modern tesisler, güçlü altyapı.",
-    type: "website",
+  title: 'Yeni Kadıköy Spor Kulübü',
+  icons: {
+    icon: [
+      { url: '/images/logo.png', sizes: 'any' },       // modern
+      { url: '/images/logo.png', type: 'image/png' }   // fallback
+    ],
+    shortcut: '/images/logo.png',
+    apple: '/images/logo.png'
   },
-  icons: { icon: "/favicon.ico" },
+  themeColor: '#2563eb'
 };
 
 export const viewport: Viewport = {
