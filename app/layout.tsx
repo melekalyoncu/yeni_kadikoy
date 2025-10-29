@@ -10,6 +10,7 @@ const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"]
 
 export const metadata: Metadata = {
   title: 'Yeni Kadıköy Spor Kulübü',
+    alternates: { canonical: 'https://yenikadikoyspor.com' },
   icons: {
     icon: [
       { url: '/images/logo.png', sizes: 'any' },       // modern
