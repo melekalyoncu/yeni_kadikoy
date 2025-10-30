@@ -1,9 +1,12 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import HeroSlider from './components/sections/HeroSlider';
 import SponsorSidebar from './components/common/SponsorSidebar';
+import { useGallery, MediaItem } from '@/lib/hooks/useGallery';
+import { useNewsList, formatDate } from '@/lib/hooks/useNews';
 
 // --- Animasyon preset ---
 const fadeUp = {
@@ -40,17 +43,37 @@ function CardShell({ children, className = '' }: { children: React.ReactNode; cl
 }
 
 function NewsCard({ item }: { item: any }) {
+  // Get first media file if available
+  const coverImage = item.mediaFiles && item.mediaFiles.length > 0
+    ? item.mediaFiles[0].s3Url
+    : null;
+
   return (
     <motion.article variants={fadeUp} className="group h-full" whileHover={{ y: -6 }}>
       <CardShell>
         <div className="overflow-hidden rounded-2xl">
-          <div className="h-48 md:h-56 flex items-center justify-center text-7xl bg-gradient-to-br from-neutral-800 to-neutral-700 text-white">
-            {item.image}
-          </div>
+          {coverImage ? (
+            <div className="h-48 md:h-56 overflow-hidden">
+              <img
+                src={coverImage}
+                alt={item.title}
+                className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-300"
+              />
+            </div>
+          ) : (
+            <div className="h-48 md:h-56 flex items-center justify-center text-7xl bg-gradient-to-br from-neutral-800 to-neutral-700 text-white">
+              📰
+            </div>
+          )}
           <div className="p-6 space-y-3">
-            <p className="text-xs font-medium text-neutral-500">{item.date}</p>
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-medium text-blue-600 bg-blue-50 px-2 py-1 rounded">
+                {item.sportTypeName}
+              </span>
+              <p className="text-xs font-medium text-neutral-500">{formatDate(item.publishedAt)}</p>
+            </div>
             <h3 className="text-xl font-bold text-neutral-900 leading-snug">{item.title}</h3>
-            <p className="text-neutral-700">{item.excerpt}</p>
+            <p className="text-neutral-700 line-clamp-2">{item.content}</p>
             <Link href={`/haberler/${item.id}`} className="inline-flex items-center gap-2 font-semibold text-neutral-900 hover:text-[#eab308]">
               Devamını Oku
               <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -90,31 +113,41 @@ function BranchCard({ href, title, stats, emoji, gradient }: { href: string; tit
   );
 }
 
-function MediaTile({ emoji }: { emoji: string }) {
+function MediaTile({ item }: { item: MediaItem }) {
   return (
     <motion.div variants={fadeUp} whileHover={{ scale: 1.04 }}>
-      <div className="rounded-2xl border border-black/5 bg-gradient-to-br from-neutral-800 to-neutral-700 text-white aspect-square grid place-content-center text-6xl">
-        {emoji}
+      <div className="rounded-2xl border border-black/5 bg-gradient-to-br from-neutral-800 to-neutral-700 overflow-hidden aspect-square">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={item.fileUrl}
+          alt={item.fileName}
+          className="w-full h-full object-cover"
+        />
       </div>
     </motion.div>
   );
 }
 
 export default function Home() {
-  const news = [
-    { id: 1, title: 'Voleybol Takımımız Şampiyonlukta', date: '15 Ekim 2025', excerpt: 'U16 voleybol takımımız bölge şampiyonluğunu kazandı...', image: '🏐' },
-    { id: 2, title: 'Yeni Basketbol Sahası Açıldı', date: '12 Ekim 2025', excerpt: 'Modern basketbol sahamız sporcularımızın hizmetine açıldı...', image: '🏀' },
-    { id: 3, title: 'Okçuluk Branşında Başarı', date: '10 Ekim 2025', excerpt: 'Sporcularımız ulusal yarışmada derece aldı...', image: '🎯' },
-  ];
+  // Use SWR hook for gallery data
+  const { media, isLoading: loadingMedia } = useGallery();
 
-  const mediaGallery = [
-    { id: 1, type: 'image', emoji: '📸' },
-    { id: 2, type: 'image', emoji: '🏆' },
-    { id: 3, type: 'image', emoji: '⚽' },
-    { id: 4, type: 'image', emoji: '🎖️' },
-    { id: 5, type: 'image', emoji: '🏅' },
-    { id: 6, type: 'image', emoji: '🥇' },
-  ];
+  // Use SWR hook for news data (only active news, first 3)
+  const { news: newsData, isLoading: loadingNews } = useNewsList(undefined, true, 1, 3);
+
+  // State to track if component is mounted (client-side)
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  // Get only the first 6 items for the homepage
+  // Only show media after component is mounted to prevent hydration mismatch
+  const mediaGallery = isMounted ? media.slice(0, 6) : [];
+
+  // Get only the first 3 news items for the homepage
+  const news = isMounted ? newsData.slice(0, 3) : [];
 
   return (
     <div className="min-h-screen bg-neutral-50">
@@ -187,11 +220,23 @@ export default function Home() {
               {/* Medya Galerisi */}
               <section>
                 <SectionHeader title="Medya Galerisi" />
-                <motion.div initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.2 }} className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
-                  {mediaGallery.map((m) => (
-                    <MediaTile key={m.id} emoji={m.emoji} />
-                  ))}
-                </motion.div>
+                {loadingMedia ? (
+                  <div className="text-center py-12">
+                    <div className="text-6xl mb-4">⏳</div>
+                    <p className="text-neutral-600">Yükleniyor...</p>
+                  </div>
+                ) : mediaGallery.length > 0 ? (
+                  <motion.div initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.2 }} className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
+                    {mediaGallery.map((m) => (
+                      <MediaTile key={m.fileName} item={m} />
+                    ))}
+                  </motion.div>
+                ) : (
+                  <div className="text-center py-12">
+                    <div className="text-6xl mb-4">📸</div>
+                    <p className="text-neutral-600">Henüz medya eklenmemiş</p>
+                  </div>
+                )}
               </section>
 
               {/* Branşlar */}

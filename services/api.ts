@@ -61,3 +61,9 @@ export const adminApi = {
   },
 };
 
+// Re-export media and sponsor APIs
+export { medyaApi } from './medya';
+export { sponsorApi } from './sponsor';
+export type { MediaUploadResponse, MediaDeleteResponse, MediaItem, MediaListResponse } from './medya';
+export type { SponsorUploadResponse, SponsorDeleteResponse, SponsorItem, SponsorListResponse } from './sponsor';
+

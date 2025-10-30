@@ -10,22 +10,21 @@ const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"]
 
 export const metadata: Metadata = {
   title: 'Yeni Kadıköy Spor Kulübü',
-    alternates: { canonical: 'https://yenikadikoyspor.com' },
+  alternates: { canonical: 'https://yenikadikoyspor.com' },
   icons: {
     icon: [
-      { url: '/images/logo.png', sizes: 'any' },       // modern
-      { url: '/images/logo.png', type: 'image/png' }   // fallback
+      { url: '/images/logo.png', sizes: 'any' },
+      { url: '/images/logo.png', type: 'image/png' }
     ],
     shortcut: '/images/logo.png',
     apple: '/images/logo.png'
   },
-  themeColor: '#2563eb'
 };
 
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#ffffff",
+  themeColor: "#2563eb",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

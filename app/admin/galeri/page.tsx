@@ -2,7 +2,9 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useAppSelector } from '@/app/store/hooks';
+import { useAppSelector, useAppDispatch } from '@/app/store/hooks';
+import { logout } from '@/app/store/authSlice';
+import { useGallery, uploadMedia, deleteMedia, MediaItem } from '@/lib/hooks/useGallery';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 
@@ -11,26 +13,24 @@ const fadeUp = {
   show: { opacity: 1, y: 0, transition: { duration: 0.4 } },
 };
 
-// Temporary mock data - will be replaced with API
-interface Photo {
-  id: number;
-  title: string;
-  url: string;
-  category: string;
-  uploadDate: string;
+// Photo interface with category metadata
+interface Photo extends MediaItem {
+  category?: string;
+  uploadDate?: string;
 }
 
 export default function GaleriYonetimi() {
   const router = useRouter();
+  const dispatch = useAppDispatch();
   const { isAuthenticated } = useAppSelector((state) => state.auth);
-  const [photos, setPhotos] = useState<Photo[]>([
-    { id: 1, title: 'Voleybol Maçı', url: '🏐', category: 'Voleybol', uploadDate: '2025-01-15' },
-    { id: 2, title: 'Basketbol Antrenmanı', url: '🏀', category: 'Basketbol', uploadDate: '2025-01-14' },
-    { id: 3, title: 'Okçuluk Yarışması', url: '🎯', category: 'Okçuluk', uploadDate: '2025-01-13' },
-  ]);
+
+  // Use SWR hook for gallery data
+  const { media, isLoading: loading, mutate } = useGallery();
+
+  const [uploading, setUploading] = useState(false);
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [formData, setFormData] = useState({
-    title: '',
+    name: '',
     category: 'Voleybol',
     file: null as File | null,
   });
@@ -41,30 +41,89 @@ export default function GaleriYonetimi() {
     }
   }, [isAuthenticated, router]);
 
+  const handleLogout = () => {
+    dispatch(logout());
+    router.push('/admin');
+  };
+
+  // Convert MediaItem[] to Photo[] for display
+  const photos: Photo[] = media.map((item) => ({
+    id: item.id,
+    name: item.name,
+    fileName: item.fileName,
+    fileUrl: item.fileUrl,
+    order: item.order,
+    category: 'Voleybol', // Default category
+  }));
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       setFormData({ ...formData, file: e.target.files[0] });
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: API integration will be added here
-    alert('Fotoğraf yükleme API\'si entegre edilecek');
-    setShowUploadModal(false);
-    setFormData({ title: '', category: 'Voleybol', file: null });
+
+    if (!formData.file) {
+      alert('Lütfen bir dosya seçin');
+      return;
+    }
+
+    if (!formData.name.trim()) {
+      alert('Lütfen bir isim girin');
+      return;
+    }
+
+    try {
+      setUploading(true);
+      await uploadMedia(formData.file, formData.name);
+
+      // Refresh the gallery data
+      await mutate();
+
+      alert('Fotoğraf başarıyla yüklendi!');
+      setShowUploadModal(false);
+      setFormData({ name: '', category: 'Voleybol', file: null });
+    } catch (error: any) {
+      console.error('Yükleme hatası:', error);
+      alert(error.message || 'Fotoğraf yüklenemedi');
+    } finally {
+      setUploading(false);
+    }
   };
 
-  const handleDelete = (id: number) => {
-    if (confirm('Bu fotoğrafı silmek istediğinizden emin misiniz?')) {
-      // TODO: API integration will be added here
-      setPhotos(photos.filter(p => p.id !== id));
-      alert('Silme API\'si entegre edilecek');
+  const handleDelete = async (id: number) => {
+    if (!confirm('Bu fotoğrafı silmek istediğinizden emin misiniz?')) {
+      return;
+    }
+
+    try {
+      await deleteMedia(id);
+
+      // Refresh the gallery data
+      await mutate();
+
+      alert('Fotoğraf başarıyla silindi!');
+    } catch (error: any) {
+      console.error('Silme hatası:', error);
+      alert(error.message || 'Fotoğraf silinemedi');
     }
   };
 
   if (!isAuthenticated) {
     return null;
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-neutral-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="text-6xl mb-4">⏳</div>
+          <p className="text-slate-600">Yükleniyor...</p>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -84,15 +143,28 @@ export default function GaleriYonetimi() {
                 <p className="text-blue-100 text-sm">Fotoğraf ekle, düzenle ve sil</p>
               </div>
             </div>
-            <button
-              onClick={() => setShowUploadModal(true)}
-              className="bg-gradient-to-r from-yellow-500 to-amber-600 hover:from-yellow-600 hover:to-amber-700 px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all flex items-center gap-2"
-            >
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-              </svg>
-              Fotoğraf Ekle
-            </button>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => setShowUploadModal(true)}
+                disabled={uploading}
+                className="bg-gradient-to-r from-yellow-500 to-amber-600 hover:from-yellow-600 hover:to-amber-700 px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                </svg>
+                Fotoğraf Ekle
+              </button>
+              <button
+                onClick={handleLogout}
+                className="bg-red-500 hover:bg-red-600 text-white px-4 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all flex items-center gap-2"
+                title="Çıkış Yap"
+              >
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                </svg>
+                Çıkış
+              </button>
+            </div>
           </div>
         </div>
       </header>
@@ -173,18 +245,25 @@ export default function GaleriYonetimi() {
         >
           {photos.map((photo) => (
             <motion.div
-              key={photo.id}
+              key={photo.fileName}
               variants={fadeUp}
               className="bg-white rounded-xl border border-slate-200 shadow-sm hover:shadow-lg transition-all overflow-hidden group"
             >
-              <div className="aspect-square bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center text-6xl">
-                {photo.url}
+              <div className="aspect-square bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center overflow-hidden">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={photo.fileUrl}
+                  alt={photo.fileName}
+                  className="w-full h-full object-cover"
+                />
               </div>
               <div className="p-4">
-                <h3 className="font-bold text-slate-900 mb-1">{photo.title}</h3>
-                <p className="text-sm text-slate-600 mb-3">{photo.category}</p>
+                <h3 className="font-bold text-slate-900 mb-1 truncate" title={photo.name}>
+                  {photo.name}
+                </h3>
+                <p className="text-sm text-slate-600 mb-3">{photo.category || 'Genel'}</p>
                 <div className="flex items-center justify-between">
-                  <span className="text-xs text-slate-500">{photo.uploadDate}</span>
+                  <span className="text-xs text-slate-500">{photo.uploadDate || 'Tarih yok'}</span>
                   <button
                     onClick={() => handleDelete(photo.id)}
                     className="text-red-600 hover:text-red-700 font-semibold text-sm"
@@ -229,15 +308,15 @@ export default function GaleriYonetimi() {
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label className="block text-sm font-semibold text-slate-700 mb-2">
-                  Fotoğraf Başlığı
+                  Başlık / İsim *
                 </label>
                 <input
                   type="text"
-                  value={formData.title}
-                  onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                  value={formData.name}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  placeholder="Örn: Okçuluk Turnuvası"
                   required
                   className="w-full px-4 py-3 rounded-lg border border-slate-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition text-slate-900"
-                  placeholder="Örn: Voleybol Maçı"
                 />
               </div>
 
@@ -259,7 +338,7 @@ export default function GaleriYonetimi() {
 
               <div>
                 <label className="block text-sm font-semibold text-slate-700 mb-2">
-                  Fotoğraf Dosyası
+                  Fotoğraf Dosyası *
                 </label>
                 <input
                   type="file"
@@ -274,15 +353,17 @@ export default function GaleriYonetimi() {
                 <button
                   type="button"
                   onClick={() => setShowUploadModal(false)}
-                  className="flex-1 px-6 py-3 rounded-lg border border-slate-300 font-semibold text-slate-700 hover:bg-slate-50 transition"
+                  disabled={uploading}
+                  className="flex-1 px-6 py-3 rounded-lg border border-slate-300 font-semibold text-slate-700 hover:bg-slate-50 transition disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   İptal
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:shadow-lg hover:from-blue-700 hover:to-blue-800 transition-all"
+                  disabled={uploading}
+                  className="flex-1 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:shadow-lg hover:from-blue-700 hover:to-blue-800 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Yükle
+                  {uploading ? 'Yükleniyor...' : 'Yükle'}
                 </button>
               </div>
             </form>

@@ -2,7 +2,9 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useAppSelector } from '@/app/store/hooks';
+import { useAppSelector, useAppDispatch } from '@/app/store/hooks';
+import { logout } from '@/app/store/authSlice';
+import { useSponsor, uploadSponsor, deleteSponsor, SponsorItem } from '@/lib/hooks/useSponsor';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 
@@ -11,25 +13,23 @@ const fadeUp = {
   show: { opacity: 1, y: 0, transition: { duration: 0.4 } },
 };
 
-// Temporary mock data - will be replaced with API
-interface Sponsor {
-  id: number;
-  name: string;
-  logo: string;
-  position: 'sidebar' | 'banner';
+// Sponsor interface with metadata
+interface Sponsor extends SponsorItem {
+  position?: 'sidebar' | 'banner';
   url?: string;
-  isActive: boolean;
-  addedDate: string;
+  isActive?: boolean;
+  addedDate?: string;
 }
 
 export default function SponsorYonetimi() {
   const router = useRouter();
+  const dispatch = useAppDispatch();
   const { isAuthenticated } = useAppSelector((state) => state.auth);
-  const [sponsors, setSponsors] = useState<Sponsor[]>([
-    { id: 1, name: 'Sponsor A', logo: '🏢', position: 'sidebar', url: 'https://example.com', isActive: true, addedDate: '2025-01-15' },
-    { id: 2, name: 'Sponsor B', logo: '🏪', position: 'banner', url: 'https://example.com', isActive: true, addedDate: '2025-01-14' },
-    { id: 3, name: 'Sponsor C', logo: '🏬', position: 'sidebar', url: 'https://example.com', isActive: false, addedDate: '2025-01-13' },
-  ]);
+
+  // Use SWR hook for sponsor data
+  const { sponsors: sponsorItems, isLoading: loading, mutate } = useSponsor();
+
+  const [uploading, setUploading] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
@@ -44,38 +44,90 @@ export default function SponsorYonetimi() {
     }
   }, [isAuthenticated, router]);
 
+  const handleLogout = () => {
+    dispatch(logout());
+    router.push('/admin');
+  };
+
+  // Convert SponsorItem[] to Sponsor[] for display
+  const sponsors: Sponsor[] = sponsorItems.map((item) => ({
+    id: item.id,
+    fileName: item.fileName,
+    fileUrl: item.fileUrl,
+    name: item.name,
+    position: 'sidebar' as 'sidebar' | 'banner',
+    url: '#',
+    order: item.order,
+  }));
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       setFormData({ ...formData, logo: e.target.files[0] });
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: API integration will be added here
-    alert('Sponsor ekleme API\'si entegre edilecek');
-    setShowAddModal(false);
-    setFormData({ name: '', position: 'sidebar', url: '', logo: null });
+
+    if (!formData.logo) {
+      alert('Lütfen bir logo dosyası seçin');
+      return;
+    }
+
+    if (!formData.name.trim()) {
+      alert('Lütfen sponsor adı girin');
+      return;
+    }
+
+    try {
+      setUploading(true);
+      await uploadSponsor(formData.logo, formData.name);
+
+      // Refresh the sponsor data
+      await mutate();
+
+      alert('Sponsor başarıyla eklendi!');
+      setShowAddModal(false);
+      setFormData({ name: '', position: 'sidebar', url: '', logo: null });
+    } catch (error: any) {
+      console.error('Yükleme hatası:', error);
+      alert(error.message || 'Sponsor eklenemedi');
+    } finally {
+      setUploading(false);
+    }
   };
 
-  const handleToggleActive = (id: number) => {
-    // TODO: API integration will be added here
-    setSponsors(sponsors.map(s => 
-      s.id === id ? { ...s, isActive: !s.isActive } : s
-    ));
-    alert('Durum güncelleme API\'si entegre edilecek');
-  };
+  const handleDelete = async (id: number) => {
+    if (!confirm('Bu sponsoru silmek istediğinizden emin misiniz?')) {
+      return;
+    }
 
-  const handleDelete = (id: number) => {
-    if (confirm('Bu sponsoru silmek istediğinizden emin misiniz?')) {
-      // TODO: API integration will be added here
-      setSponsors(sponsors.filter(s => s.id !== id));
-      alert('Silme API\'si entegre edilecek');
+    try {
+      await deleteSponsor(id);
+
+      // Refresh the sponsor data
+      await mutate();
+
+      alert('Sponsor başarıyla silindi!');
+    } catch (error: any) {
+      console.error('Silme hatası:', error);
+      alert(error.message || 'Sponsor silinemedi');
     }
   };
 
   if (!isAuthenticated) {
     return null;
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-neutral-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="text-6xl mb-4">⏳</div>
+          <p className="text-slate-600">Yükleniyor...</p>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -95,15 +147,28 @@ export default function SponsorYonetimi() {
                 <p className="text-yellow-100 text-sm">Reklam panoları ve sponsorlar</p>
               </div>
             </div>
-            <button
-              onClick={() => setShowAddModal(true)}
-              className="bg-white text-amber-700 hover:bg-yellow-50 px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all flex items-center gap-2"
-            >
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-              </svg>
-              Sponsor Ekle
-            </button>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => setShowAddModal(true)}
+                disabled={uploading}
+                className="bg-white text-amber-700 hover:bg-yellow-50 px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                </svg>
+                Sponsor Ekle
+              </button>
+              <button
+                onClick={handleLogout}
+                className="bg-red-500 hover:bg-red-600 text-white px-4 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all flex items-center gap-2"
+                title="Çıkış Yap"
+              >
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                </svg>
+                Çıkış
+              </button>
+            </div>
           </div>
         </div>
       </header>
@@ -133,7 +198,7 @@ export default function SponsorYonetimi() {
               <div>
                 <p className="text-sm font-medium text-slate-600">Aktif</p>
                 <p className="text-3xl font-bold text-green-600 mt-1">
-                  {sponsors.filter(s => s.isActive).length}
+                  {sponsors.filter(s => s.isActive !== false).length}
                 </p>
               </div>
               <div className="w-12 h-12 rounded-lg bg-green-100 text-green-600 flex items-center justify-center text-2xl">
@@ -184,54 +249,61 @@ export default function SponsorYonetimi() {
         >
           {sponsors.map((sponsor) => (
             <motion.div
-              key={sponsor.id}
+              key={sponsor.fileName}
               variants={fadeUp}
               className="bg-white rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-all p-6"
             >
               <div className="flex items-center gap-6">
                 {/* Logo */}
-                <div className="w-20 h-20 rounded-lg bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center text-4xl flex-shrink-0">
-                  {sponsor.logo}
+                <div className="w-20 h-20 rounded-lg bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center overflow-hidden flex-shrink-0">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={sponsor.fileUrl}
+                    alt={sponsor.name || sponsor.fileName}
+                    className="w-full h-full object-contain"
+                  />
                 </div>
 
                 {/* Info */}
                 <div className="flex-1">
                   <div className="flex items-start justify-between mb-2">
                     <div>
-                      <h3 className="text-xl font-bold text-slate-900">{sponsor.name}</h3>
-                      <p className="text-sm text-slate-600">{sponsor.url}</p>
+                      <h3 className="text-xl font-bold text-slate-900">{sponsor.name || sponsor.fileName}</h3>
+                      <p className="text-sm text-slate-600">{sponsor.url || 'URL belirtilmemiş'}</p>
                     </div>
                     <div className="flex items-center gap-2">
+                      {sponsor.position && (
+                        <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                          sponsor.position === 'sidebar'
+                            ? 'bg-blue-100 text-blue-700'
+                            : 'bg-purple-100 text-purple-700'
+                        }`}>
+                          {sponsor.position === 'sidebar' ? 'Sidebar' : 'Banner'}
+                        </span>
+                      )}
                       <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                        sponsor.position === 'sidebar' 
-                          ? 'bg-blue-100 text-blue-700' 
-                          : 'bg-purple-100 text-purple-700'
-                      }`}>
-                        {sponsor.position === 'sidebar' ? 'Sidebar' : 'Banner'}
-                      </span>
-                      <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                        sponsor.isActive 
-                          ? 'bg-green-100 text-green-700' 
+                        sponsor.isActive !== false
+                          ? 'bg-green-100 text-green-700'
                           : 'bg-red-100 text-red-700'
                       }`}>
-                        {sponsor.isActive ? 'Aktif' : 'Pasif'}
+                        {sponsor.isActive !== false ? 'Aktif' : 'Pasif'}
                       </span>
                     </div>
                   </div>
-                  <p className="text-sm text-slate-500">Eklenme Tarihi: {sponsor.addedDate}</p>
+                  <p className="text-sm text-slate-500">Eklenme Tarihi: {sponsor.addedDate || 'Tarih yok'}</p>
                 </div>
 
                 {/* Actions */}
                 <div className="flex items-center gap-2 flex-shrink-0">
                   <button
-                    onClick={() => handleToggleActive(sponsor.id)}
+                    onClick={() => handleToggleActive(sponsor.fileName)}
                     className={`px-4 py-2 rounded-lg font-semibold text-sm transition ${
-                      sponsor.isActive
+                      sponsor.isActive !== false
                         ? 'bg-red-100 text-red-700 hover:bg-red-200'
                         : 'bg-green-100 text-green-700 hover:bg-green-200'
                     }`}
                   >
-                    {sponsor.isActive ? 'Pasif Yap' : 'Aktif Yap'}
+                    {sponsor.isActive !== false ? 'Pasif Yap' : 'Aktif Yap'}
                   </button>
                   <button
                     onClick={() => handleDelete(sponsor.id)}
@@ -333,15 +405,17 @@ export default function SponsorYonetimi() {
                 <button
                   type="button"
                   onClick={() => setShowAddModal(false)}
-                  className="flex-1 px-6 py-3 rounded-lg border border-slate-300 font-semibold text-slate-700 hover:bg-slate-50 transition"
+                  disabled={uploading}
+                  className="flex-1 px-6 py-3 rounded-lg border border-slate-300 font-semibold text-slate-700 hover:bg-slate-50 transition disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   İptal
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 bg-gradient-to-r from-yellow-500 to-amber-600 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:shadow-lg hover:from-yellow-600 hover:to-amber-700 transition-all"
+                  disabled={uploading}
+                  className="flex-1 bg-gradient-to-r from-yellow-500 to-amber-600 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:shadow-lg hover:from-yellow-600 hover:to-amber-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Ekle
+                  {uploading ? 'Ekleniyor...' : 'Ekle'}
                 </button>
               </div>
             </form>
