@@ -17,7 +17,6 @@ const fadeUp = {
 interface Sponsor extends SponsorItem {
   position?: 'sidebar' | 'banner';
   url?: string;
-  isActive?: boolean;
   addedDate?: string;
 }
 
@@ -180,7 +179,7 @@ export default function SponsorYonetimi() {
           initial="hidden"
           animate="show"
           variants={fadeUp}
-          className="grid md:grid-cols-4 gap-4 mb-8"
+          className="grid md:grid-cols-3 gap-4 mb-8"
         >
           <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
             <div className="flex items-center justify-between">
@@ -196,39 +195,26 @@ export default function SponsorYonetimi() {
           <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-slate-600">Aktif</p>
-                <p className="text-3xl font-bold text-green-600 mt-1">
-                  {sponsors.filter(s => s.isActive !== false).length}
-                </p>
-              </div>
-              <div className="w-12 h-12 rounded-lg bg-green-100 text-green-600 flex items-center justify-center text-2xl">
-                ✅
-              </div>
-            </div>
-          </div>
-          <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-slate-600">Sidebar</p>
-                <p className="text-3xl font-bold text-slate-900 mt-1">
-                  {sponsors.filter(s => s.position === 'sidebar').length}
+                <p className="text-sm font-medium text-slate-600">Yüklenen Logolar</p>
+                <p className="text-3xl font-bold text-blue-600 mt-1">
+                  {sponsors.length}
                 </p>
               </div>
               <div className="w-12 h-12 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center text-2xl">
-                📌
+                📷
               </div>
             </div>
           </div>
           <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-slate-600">Banner</p>
-                <p className="text-3xl font-bold text-slate-900 mt-1">
-                  {sponsors.filter(s => s.position === 'banner').length}
+                <p className="text-sm font-medium text-slate-600">Galeri Öğeleri</p>
+                <p className="text-3xl font-bold text-green-600 mt-1">
+                  {sponsors.length}
                 </p>
               </div>
-              <div className="w-12 h-12 rounded-lg bg-purple-100 text-purple-600 flex items-center justify-center text-2xl">
-                🎪
+              <div className="w-12 h-12 rounded-lg bg-green-100 text-green-600 flex items-center justify-center text-2xl">
+                🖼️
               </div>
             </div>
           </div>
@@ -269,46 +255,30 @@ export default function SponsorYonetimi() {
                   <div className="flex items-start justify-between mb-2">
                     <div>
                       <h3 className="text-xl font-bold text-slate-900">{sponsor.name || sponsor.fileName}</h3>
-                      <p className="text-sm text-slate-600">{sponsor.url || 'URL belirtilmemiş'}</p>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      {sponsor.position && (
-                        <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                          sponsor.position === 'sidebar'
-                            ? 'bg-blue-100 text-blue-700'
-                            : 'bg-purple-100 text-purple-700'
-                        }`}>
-                          {sponsor.position === 'sidebar' ? 'Sidebar' : 'Banner'}
+                      <div className="flex items-center gap-2 mt-2">
+                        <span className="px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-700">
+                          Sıra: {sponsor.order}
                         </span>
-                      )}
-                      <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                        sponsor.isActive !== false
-                          ? 'bg-green-100 text-green-700'
-                          : 'bg-red-100 text-red-700'
-                      }`}>
-                        {sponsor.isActive !== false ? 'Aktif' : 'Pasif'}
-                      </span>
+                        <span className="px-3 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-700">
+                          ID: {sponsor.id}
+                        </span>
+                      </div>
                     </div>
                   </div>
-                  <p className="text-sm text-slate-500">Eklenme Tarihi: {sponsor.addedDate || 'Tarih yok'}</p>
+                  <p className="text-sm text-slate-500">
+                    <span className="font-medium">Dosya:</span> {sponsor.fileName}
+                  </p>
                 </div>
 
                 {/* Actions */}
                 <div className="flex items-center gap-2 flex-shrink-0">
                   <button
-                    onClick={() => handleToggleActive(sponsor.fileName)}
-                    className={`px-4 py-2 rounded-lg font-semibold text-sm transition ${
-                      sponsor.isActive !== false
-                        ? 'bg-red-100 text-red-700 hover:bg-red-200'
-                        : 'bg-green-100 text-green-700 hover:bg-green-200'
-                    }`}
-                  >
-                    {sponsor.isActive !== false ? 'Pasif Yap' : 'Aktif Yap'}
-                  </button>
-                  <button
                     onClick={() => handleDelete(sponsor.id)}
-                    className="px-4 py-2 rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 font-semibold text-sm transition"
+                    className="px-4 py-2 rounded-lg bg-red-500 text-white hover:bg-red-600 font-semibold text-sm transition flex items-center gap-2"
                   >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
                     Sil
                   </button>
                 </div>
