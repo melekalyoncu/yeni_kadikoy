@@ -69,7 +69,7 @@ export default function HaberlerPage() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           {/* Left Sidebar */}
           <aside className="lg:col-span-2">
-            <SponsorSidebar />
+            <SponsorSidebar maxSponsors={6} />
           </aside>
 
           {/* Main Content */}
@@ -215,7 +215,7 @@ export default function HaberlerPage() {
 
           {/* Right Sidebar */}
           <aside className="lg:col-span-2">
-            <SponsorSidebar />
+            <SponsorSidebar maxSponsors={6} />
           </aside>
         </div>
       </div>

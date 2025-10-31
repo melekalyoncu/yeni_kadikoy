@@ -64,7 +64,7 @@ export default function KayitPage() {
           {/* Sol Sponsor — lg ve üzeri göster, kenara yakın görünüm için sadece iç padding */}
           <aside className="lg:col-span-2 px-4 hidden lg:block">
             <div className="lg:sticky lg:top-6">
-              <SponsorSidebar />
+              <SponsorSidebar maxSponsors={6} />
             </div>
           </aside>
 
@@ -281,7 +281,7 @@ export default function KayitPage() {
           {/* Sağ Sponsor — lg ve üzeri göster */}
           <aside className="lg:col-span-2 px-4 hidden lg:block">
             <div className="lg:sticky lg:top-6">
-              <SponsorSidebar />
+              <SponsorSidebar maxSponsors={6} />
             </div>
           </aside>
         </div>

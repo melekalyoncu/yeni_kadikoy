@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import SponsorSidebar from '@/app/components/common/SponsorSidebar';
 import HeroBand from '@/app/components/sections/HeroBand';
 import GridShell from '@/app/components/layout/GridShell';
 
@@ -13,11 +12,7 @@ export default function KulupPage() {
         subtitle="Tesislerimiz, Branşlarımız ve Faaliyetlerimiz"
       />
 
-      <GridShell
-        left={<SponsorSidebar />}
-        right={<SponsorSidebar />}
-        stickyOffset={24}
-      >
+      <GridShell stickyOffset={24}>
 
         {/* Orta içerik — okunabilirlik için max width */}
         <main className="lg:col-span-8">

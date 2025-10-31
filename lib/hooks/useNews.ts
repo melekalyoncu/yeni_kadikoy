@@ -92,14 +92,26 @@ export async function fetchNewsList(
   pageSize: number = 10
 ): Promise<NewsListResponse> {
   const params = new URLSearchParams();
-  
+
   if (sportType !== undefined) params.append('sportType', sportType.toString());
   if (isActive !== undefined) params.append('isActive', isActive.toString());
   params.append('pageNumber', pageNumber.toString());
   params.append('pageSize', pageSize.toString());
 
   const response = await apiClient.get<NewsListResponse>(`/News?${params.toString()}`);
-  return response.data;
+
+  // Add sportTypeName and mediaTypeName to each news item
+  const data = response.data;
+  data.data = data.data.map(news => ({
+    ...news,
+    sportTypeName: getSportTypeName(news.sportType),
+    mediaFiles: news.mediaFiles.map(media => ({
+      ...media,
+      mediaTypeName: getMediaTypeName(media.mediaType)
+    }))
+  }));
+
+  return data;
 }
 
 /**
@@ -107,7 +119,17 @@ export async function fetchNewsList(
  */
 export async function fetchNewsById(id: number): Promise<NewsItem> {
   const response = await apiClient.get<NewsItem>(`/News/${id}`);
-  return response.data;
+  const news = response.data;
+
+  // Add sportTypeName and mediaTypeName
+  return {
+    ...news,
+    sportTypeName: getSportTypeName(news.sportType),
+    mediaFiles: news.mediaFiles.map(media => ({
+      ...media,
+      mediaTypeName: getMediaTypeName(media.mediaType)
+    }))
+  };
 }
 
 /**

@@ -263,7 +263,15 @@ export default function GaleriYonetimi() {
                 </h3>
                 <p className="text-sm text-slate-600 mb-3">{photo.category || 'Genel'}</p>
                 <div className="flex items-center justify-between">
-                  <span className="text-xs text-slate-500">{photo.uploadDate || 'Tarih yok'}</span>
+                  <span className="text-xs text-slate-500">
+                    {photo.uploadedAt
+                      ? new Date(photo.uploadedAt).toLocaleDateString('tr-TR', {
+                          year: 'numeric',
+                          month: 'long',
+                          day: 'numeric'
+                        })
+                      : 'Tarih yok'}
+                  </span>
                   <button
                     onClick={() => handleDelete(photo.id)}
                     className="text-red-600 hover:text-red-700 font-semibold text-sm"

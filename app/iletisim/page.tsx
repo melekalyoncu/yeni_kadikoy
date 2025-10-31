@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import SponsorSidebar from '@/app/components/common/SponsorSidebar';
 import HeroBand from '@/app/components/sections/HeroBand';
 import GridShell from '@/app/components/layout/GridShell';
 
@@ -33,7 +32,7 @@ export default function IletisimPage() {
         subtitle="Soruların için bize yaz—en kısa sürede dönüş yapalım."
       />
 
-      <GridShell left={<SponsorSidebar />} right={<SponsorSidebar />}>
+      <GridShell>
 
         {/* Orta içerik: max width ile sınırlı */}
         <main className="lg:col-span-8">

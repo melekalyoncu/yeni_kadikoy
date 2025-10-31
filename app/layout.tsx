@@ -10,6 +10,7 @@ const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"]
 
 export const metadata: Metadata = {
   title: 'Yeni Kadıköy Spor Kulübü',
+  description: 'Yeni Kadıköy Spor Kulübü - İçerik ve kullanıcı yönetimi',
   alternates: { canonical: 'https://yenikadikoyspor.com' },
   icons: {
     icon: [
@@ -18,6 +19,28 @@ export const metadata: Metadata = {
     ],
     shortcut: '/images/logo.png',
     apple: '/images/logo.png'
+  },
+  openGraph: {
+    type: 'website',
+    locale: 'tr_TR',
+    url: 'https://yenikadikoyspor.com',
+    siteName: 'Yeni Kadıköy Spor Kulübü',
+    title: 'Yeni Kadıköy Spor Kulübü',
+    description: 'Yeni Kadıköy Spor Kulübü - İçerik ve kullanıcı yönetimi',
+    images: [
+      {
+        url: '/images/logo.png',
+        width: 1200,
+        height: 630,
+        alt: 'Yeni Kadıköy Spor Kulübü Logo',
+      }
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Yeni Kadıköy Spor Kulübü',
+    description: 'Yeni Kadıköy Spor Kulübü - İçerik ve kullanıcı yönetimi',
+    images: ['/images/logo.png'],
   },
 };
 

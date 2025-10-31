@@ -201,7 +201,7 @@ export default function NewsDetailPage() {
 
           {/* Sidebar */}
           <aside className="lg:col-span-4">
-            <SponsorSidebar />
+            <SponsorSidebar maxSponsors={6} />
           </aside>
         </div>
       </div>

@@ -52,10 +52,11 @@ export default function Header() {
           >
             <Image
               src="/images/logo.png"
-              alt="Yeni Kadıköy Spor Kulübü"
+              alt="Yeni Kadıköy Spor Kulübü Logo"
               width={56}
               height={56}
               className="h-14 w-14 object-contain"
+              priority
             />
             <span className="leading-tight">
               <span className="block text-xl font-extrabold tracking-tight text-blue-600">
@@ -154,7 +155,7 @@ function NavLink({
       <span className="px-1.5 py-1">{children}</span>
       {/* underline */}
       <span
-        aria-hidden
+        aria-hidden="true"
         className={[
           "pointer-events-none absolute -bottom-1 left-0 h-[2px] w-full origin-left scale-x-0",
           "bg-gradient-to-r from-[#facc15] via-[#f59e0b] to-[#ea580c]",

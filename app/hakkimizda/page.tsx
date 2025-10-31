@@ -1,4 +1,3 @@
-import SponsorSidebar from '@/app/components/common/SponsorSidebar';
 import HeroBand from '@/app/components/sections/HeroBand';
 import GridShell from '@/app/components/layout/GridShell';
 
@@ -12,7 +11,7 @@ export default function HakkimizdaPage() {
         subtitle="Kadıköy Spor Kulübü — Geleceğin Şampiyonlarını Yetiştiriyoruz"
       />
 
-      <GridShell left={<SponsorSidebar />} right={<SponsorSidebar />}>
+      <GridShell>
 
         {/* Orta içerik: max width ile sınırlı */}
         <main className="lg:col-span-8">

@@ -160,7 +160,7 @@ export default function Home() {
 
           {/* Sol sponsor kolonu: kenara yakın olsun diye yalnızca iç padding veriyoruz */}
           <aside className="lg:col-span-2 px-4">
-            <SponsorSidebar />
+            <SponsorSidebar maxSponsors={6} />
           </aside>
 
           {/* Orta İçerik */}
@@ -281,7 +281,7 @@ export default function Home() {
 
           {/* Sağ Sponsor */}
           <aside className="lg:col-span-2 px-4">
-            <SponsorSidebar />
+            <SponsorSidebar maxSponsors={6} />
           </aside>
         </div>
       </div>

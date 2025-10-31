@@ -16,7 +16,7 @@ const fadeUp = {
 export default function AdminDashboard() {
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const { isAuthenticated, username, email } = useAppSelector((state) => state.auth);
+  const { isAuthenticated, username } = useAppSelector((state) => state.auth);
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -128,7 +128,7 @@ export default function AdminDashboard() {
                     className="absolute inset-0 opacity-5
                       [background-image:radial-gradient(circle_at_20%_20%,currentColor_2px,transparent_2px)]
                       [background-size:20px_20px]"
-                    aria-hidden
+                    aria-hidden="true"
                   />
 
                   {/* Gradient Header */}

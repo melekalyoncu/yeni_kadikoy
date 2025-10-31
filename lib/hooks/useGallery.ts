@@ -10,6 +10,8 @@ export interface MediaItem {
   fileName: string;
   fileUrl: string;
   order: number;
+  uploadedAt?: string;
+  category?: string;
 }
 
 /**

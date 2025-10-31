@@ -1,5 +1,7 @@
 'use client';
 import type { ReactNode } from 'react';
+import SponsorSidebar from '@/app/components/common/SponsorSidebar';
+import { Placement } from '@/lib/hooks/useSponsor';
 
 type GridShellProps = {
   children: ReactNode;          // orta içerik (8 kolon)
@@ -11,8 +13,8 @@ type GridShellProps = {
 
 export default function GridShell({
   children,
-  left,
-  right,
+  left = <SponsorSidebar placement={Placement.Sidebar} maxSponsors={6} />,
+  right = <SponsorSidebar placement={Placement.Sidebar} maxSponsors={6} />,
   stickyOffset = 24, // lg:top-6 ~ 24px
   className = '',
 }: GridShellProps) {
