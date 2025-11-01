@@ -44,15 +44,15 @@ function SectionHeader({
         <motion.h2
           variants={fadeUp}
           className="
-        text-2xl md:text-4xl
-        font-medium italic
-        tracking-[-0.03em]
-        bg-gradient-to-r from-[#eab308] to-[#c2410c]
-        text-transparent bg-clip-text
-        drop-shadow-[0_1px_1px_rgba(0,0,0,0.2)]
-        text-center
-      "
-        >
+    text-2xl md:text-4xl
+    font-medium italic
+    tracking-[-0.03em]
+    bg-gradient-to-r from-[#eab308] to-[#c2410c]
+    text-transparent bg-clip-text
+    drop-shadow-[0_1px_1px_rgba(0,0,0,0.2)]
+    pr-1
+  "
+                  >
           {title}
         </motion.h2>
 
@@ -167,7 +167,7 @@ export default function Home() {
            lg: 12 kolon -> 2 / 8 / 2
            mobilde tek kolon
         */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
           {/* SOL SPONSOR */}
           <aside className="lg:col-span-2 px-4 flex justify-center lg:block">
             <SponsorSidebar maxSponsors={6} />

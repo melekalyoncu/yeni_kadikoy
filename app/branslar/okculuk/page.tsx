@@ -18,7 +18,7 @@ export default function OkculukPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-neutral-50">
       {/* Compact Hero as Card (yeşil tonlar) */}
       <BranchHero
         emoji="🎯"
@@ -36,7 +36,7 @@ export default function OkculukPage() {
       <div className="container mx-auto px-4 py-10 md:py-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8">
           {/* Left Sidebar */}
-          <aside className="lg:col-span-2 order-2 lg:order-1">
+          <aside className="lg:col-span-2 order-2 lg:order-1 flex justify-center lg:block">
             <SponsorSidebar />
           </aside>
 
@@ -164,7 +164,7 @@ export default function OkculukPage() {
           </main>
 
           {/* Right Sidebar */}
-          <aside className="lg:col-span-2 order-3">
+          <aside className="lg:col-span-2 order-3 flex justify-center lg:block">
             <SponsorSidebar />
           </aside>
         </div>

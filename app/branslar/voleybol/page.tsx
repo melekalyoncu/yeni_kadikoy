@@ -15,7 +15,7 @@ export default function VoleybolPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-neutral-50">
       {/* Compact Hero as Card */}
       <div className="container mx-auto px-4 pt-8 md:pt-10">
         <div className="relative overflow-hidden rounded-2xl border border-amber-600/40 bg-gradient-to-r from-yellow-500 to-amber-600 shadow-lg">
@@ -50,7 +50,7 @@ export default function VoleybolPage() {
       <div className="container mx-auto px-4 py-10 md:py-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8">
           {/* Left Sidebar */}
-          <aside className="lg:col-span-2 order-2 lg:order-1">
+          <aside className="lg:col-span-2 order-2 lg:order-1 flex justify-center lg:block">
             <SponsorSidebar />
           </aside>
 
@@ -166,7 +166,7 @@ export default function VoleybolPage() {
           </main>
 
           {/* Right Sidebar */}
-          <aside className="lg:col-span-2 order-3">
+          <aside className="lg:col-span-2 order-3 flex justify-center lg:block">
             <SponsorSidebar />
           </aside>
         </div>

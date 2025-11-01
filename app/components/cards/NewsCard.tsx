@@ -1,70 +1,113 @@
-import Link from 'next/link';
-import { motion } from 'framer-motion';
-import { formatDate } from '@/lib/hooks/useNews';
+import Link from "next/link";
+import { motion } from "framer-motion";
+import { formatDate } from "@/lib/hooks/useNews";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 12 },
   show: { opacity: 1, y: 0, transition: { duration: 0.4 } },
 };
 
-function CardShell({ children, className = '' }: { children: React.ReactNode; className?: string }) {
-  return (
-    <div className={`relative rounded-2xl p-[1px] bg-gradient-to-br from-[#2563eb]/15 via-[#eab308]/25 to-[#16a34a]/15 ${className}`}>
-      <div className="rounded-2xl bg-white/80 backdrop-blur-xl border border-black/5 shadow-sm">
-        {children}
-      </div>
-    </div>
-  );
-}
-
 export default function NewsCard({ item }: { item: any }) {
-  // Get first media file if available
-  const coverImage = item.mediaFiles && item.mediaFiles.length > 0
-    ? item.mediaFiles[0].s3Url
-    : null;
+  // kapak görseli varsa onu al
+  const coverImage =
+    item.mediaFiles && item.mediaFiles.length > 0
+      ? item.mediaFiles[0].s3Url
+      : null;
 
   return (
-    <motion.article variants={fadeUp} className="group h-full flex flex-col" whileHover={{ y: -6 }}>
-      <CardShell className="h-full">
-        <div className="overflow-hidden rounded-2xl h-full flex flex-col">
+    <motion.article
+      variants={fadeUp}
+      whileHover={{ y: -4 }}
+      className="h-full"
+    >
+      <div
+        className="
+          flex flex-col h-full
+          rounded-2xl border border-slate-200 bg-white/90 backdrop-blur-xl
+          shadow-[0_24px_60px_rgba(0,0,0,0.08)]
+          hover:shadow-[0_32px_80px_rgba(0,0,0,0.12)]
+          transition-shadow
+        "
+      >
+        {/* Kapak görsel alanı */}
+        <div className="h-48 md:h-56 w-full overflow-hidden rounded-t-2xl flex-shrink-0 bg-neutral-800 text-white grid place-items-center">
           {coverImage ? (
-            <div className="h-48 md:h-56 overflow-hidden flex-shrink-0">
-              <img
-                src={coverImage}
-                alt={item.title}
-                className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-300"
-              />
-            </div>
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={coverImage}
+              alt={item.title}
+              className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+            />
           ) : (
-            <div className="h-48 md:h-56 flex items-center justify-center text-7xl bg-gradient-to-br from-neutral-800 to-neutral-700 text-white flex-shrink-0">
-              📰
-            </div>
+            <div className="text-6xl">📰</div>
           )}
-          <div className="p-6 space-y-3 flex flex-col flex-grow">
-            <div className="flex items-center gap-2 flex-shrink-0">
-              <span className="text-xs font-medium text-blue-600 bg-blue-50 px-2 py-1 rounded">
-                {item.sportTypeName}
-              </span>
-              <p className="text-xs font-medium text-neutral-500">{formatDate(item.publishedAt)}</p>
-            </div>
-            <h3 className="text-xl font-bold text-neutral-900 leading-snug line-clamp-2 flex-shrink-0">
-              {item.title}
-            </h3>
-            <p className="text-neutral-700 line-clamp-3 flex-grow">
-              {item.content}
-            </p>
-            <div className="flex-shrink-0">
-              <Link href={`/haberler/${item.id}`} className="inline-flex items-center gap-2 font-semibold text-neutral-900 hover:text-[#eab308]">
-                Devamını Oku
-                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                </svg>
-              </Link>
-            </div>
+        </div>
+
+        {/* İçerik alanı */}
+        <div className="flex flex-col flex-1 p-6">
+          {/* Üst bilgi satırı */}
+          <div className="flex items-center justify-between w-full text-[11px] font-medium text-neutral-600 flex-shrink-0 mb-2">
+            <span className="inline-flex items-center rounded px-2 py-1 font-semibold text-[#1E4FBC]">
+              {item.sportTypeName || "Hepsi"}
+            </span>
+
+            <span className="text-neutral-500">
+              {formatDate(item.publishedAt)}
+            </span>
+          </div>
+
+
+          {/* Başlık */}
+          <h3
+            className="
+              text-lg md:text-xl font-semibold text-neutral-900 leading-snug
+              line-clamp-2 flex-shrink-0
+            "
+          >
+            {item.title}
+          </h3>
+
+          {/* Kısa içerik */}
+          <p
+            className="
+              text-neutral-700 text-sm md:text-base leading-relaxed
+              mt-3 line-clamp-3 flex-shrink-0
+            "
+          >
+            {item.content}
+          </p>
+
+          {/* Boşluk itici (footer link alta sabitlensin) */}
+          <div className="flex-1" />
+
+          {/* Devamını oku linki */}
+          <div className="pt-4 flex-shrink-0">
+            <Link
+              href={`/haberler/${item.id}`}
+              className="
+                inline-flex items-center gap-2
+                font-semibold text-neutral-900
+                hover:text-[#eab308] text-sm md:text-[15px]
+              "
+            >
+              Devamını Oku
+              <svg
+                className="w-4 h-4"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M9 5l7 7-7 7"
+                />
+              </svg>
+            </Link>
           </div>
         </div>
-      </CardShell>
+      </div>
     </motion.article>
   );
 }
-

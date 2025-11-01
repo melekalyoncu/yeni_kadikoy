@@ -92,7 +92,7 @@ export default function IletisimPage() {
                 <div className="text-right">
                   <button
                     type="submit"
-                    className="inline-block bg-gradient-to-r from-slate-800 to-slate-700 hover:shadow-lg text-white font-medium py-2 px-6 rounded-lg transition-all hover:-translate-y-0.5"
+                    className="w-full md:w-auto bg-white text-slate-900 font-bold rounded-lg px-6 py-3 border border-slate-300 hover:shadow-md transition-all"
                   >
                     Gönder
                   </button>
