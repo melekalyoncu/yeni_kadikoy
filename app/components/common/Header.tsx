@@ -59,7 +59,7 @@ export default function Header() {
               priority
             />
             <span className="leading-tight">
-              <span className="block text-xl font-extrabold tracking-tight text-blue-600">
+              <span className="block text-xl font-extrabold tracking-tight text-[#1E4FBC]">
                 YENİ KADIKÖY
               </span>
               <span className="block text-sm font-semibold text-[#EAB308]">

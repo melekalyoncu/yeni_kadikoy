@@ -102,46 +102,219 @@ export default function HakkimizdaPage() {
             </section>
 
             {/* Team */}
-            <section className="mb-12 bg-slate-50 rounded-xl shadow-sm border border-slate-200 p-8">
-              <h2 className="text-3xl font-bold text-slate-900 mb-6">Yönetim Kadromuz</h2>
-              <div className="grid md:grid-cols-3 gap-6">
+            <section className="mb-12">
+              {/* Section Header */}
+              <div className="text-center mb-8">
+                <div className="flex items-center justify-center gap-3 md:gap-4">
+                  <span className="h-[2px] w-8 md:w-10 rounded-full bg-gradient-to-r from-[#eab308] to-[#c2410c]" />
+                  <h2
+                    className="
+          text-2xl md:text-4xl
+          font-medium italic
+          tracking-[-0.03em]
+          bg-gradient-to-r from-[#eab308] to-[#c2410c]
+          text-transparent bg-clip-text
+          drop-shadow-[0_1px_1px_rgba(0,0,0,0.2)]
+        "
+                  >
+                    Yönetim Kadromuz
+                  </h2>
+                  <span className="h-[2px] w-8 md:w-10 rounded-full bg-gradient-to-r from-[#eab308] to-[#c2410c]" />
+                </div>
+                <p className="mt-4 text-sm md:text-base text-slate-500 max-w-xl mx-auto leading-relaxed">
+                  Kulübümüzün yönetim kadrosu; spor kültürünü geliştirmeyi, altyapıyı güçlendirmeyi
+                  ve sürdürülebilir başarıyı hedefler.
+                </p>
+              </div>
+
+              {/* Card Grid */}
+              <div
+                className="
+      grid grid-cols-1 md:grid-cols-3 gap-6
+      max-w-5xl mx-auto
+    "
+              >
                 {[
-                  { name: 'Ahmet Yılmaz', role: 'Kulüp Başkanı' },
-                  { name: 'Mehmet Demir', role: 'Genel Koordinatör' },
-                  { name: 'Ayşe Kaya', role: 'Spor Direktörü' },
-                ].map((p) => (
-                  <div key={p.name} className="text-center p-6 rounded-lg bg-white border border-slate-100 hover:shadow-md transition-shadow">
-                    <div className="w-24 h-24 bg-gradient-to-br from-slate-900 to-slate-800 rounded-full mx-auto mb-4 flex items-center justify-center text-white text-3xl shadow-lg">
-                      👤
+                  {
+                    name: "Ahmet Yılmaz",
+                    role: "Kulüp Başkanı",
+                    photoUrl: "", // örn: "/images/yonetim/ahmet.jpg"
+                  },
+                  {
+                    name: "Mehmet Demir",
+                    role: "Genel Koordinatör",
+                    photoUrl: "", // eğer yoksa boş bırak
+                  },
+                  {
+                    name: "Ayşe Kaya",
+                    role: "Spor Direktörü",
+                    photoUrl: "",
+                  },
+                ].map((p) => {
+                  // fallback avatar için baş harfleri çıkaralım:
+                  const initials = p.name
+                    .split(" ")
+                    .map((part) => part[0])
+                    .slice(0, 2)
+                    .join("");
+
+                  return (
+                    <div
+                      key={p.name}
+                      className="
+            relative rounded-2xl p-6 text-center
+            shadow-[0_24px_60px_rgba(0,0,0,0.3)]
+            ring-1 ring-slate-200/60
+            bg-white/80 backdrop-blur-xl
+            border border-white
+            hover:shadow-[0_32px_80px_rgba(0,0,0,0.4)]
+            transition-shadow
+          "
+                    >
+                      {/* profil resmi alanı */}
+                      <div className="relative w-24 h-24 mx-auto mb-4">
+                        {p.photoUrl ? (
+                          // gerçek foto varsa
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img
+                            src={p.photoUrl}
+                            alt={p.name}
+                            className="
+                  w-24 h-24 rounded-full object-cover
+                  ring-2 ring-[#eab308]
+                  shadow-[0_16px_40px_rgba(234,179,8,0.4)]
+                "
+                          />
+                        ) : (
+                          // fallback avatar (kulüp renkleri ile)
+                          <div
+                            className="
+                  w-24 h-24 rounded-full
+                  bg-gradient-to-br from-[#1E4FBC] via-[#003580] to-[#0a1a3a]
+                  flex items-center justify-center
+                  text-white font-semibold text-xl
+                  ring-2 ring-[#eab308]
+                  shadow-[0_16px_40px_rgba(234,179,8,0.4)]
+                  relative overflow-hidden
+                "
+                          >
+                            {/* hafif glow dekor */}
+                            <div className="absolute -top-8 -right-8 h-16 w-16 bg-[#eab308]/30 blur-2xl opacity-40 rounded-full" />
+                            <div className="absolute -bottom-8 -left-8 h-16 w-16 bg-[#1E4FBC]/30 blur-2xl opacity-30 rounded-full" />
+                            <span className="relative z-10 tracking-[-0.03em]">{initials}</span>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* isim / rol */}
+                      <h3 className="font-semibold text-lg text-slate-900 tracking-[-0.02em]">
+                        {p.name}
+                      </h3>
+                      <p className="text-slate-600 text-sm font-medium">{p.role}</p>
+
+                      {/* opsiyonel alt bilgi alanı */}
+                      <p className="text-[12px] text-slate-500 leading-relaxed mt-3">
+                        {/* bunu ister silersin ister doldurursun */}
+                        {/* örnek: "Kadıköy altyapı yapılanması sorumlusu" */}
+                      </p>
+
+                      {/* iletişim / buton gibi bir şey istersen ileride buraya */}
+                      {/* <button className="mt-4 text-[12px] font-semibold text-[#1E4FBC] hover:text-[#0f2c6d] transition-colors">
+            İletişim →
+          </button> */}
                     </div>
-                    <h3 className="font-bold text-lg text-slate-900">{p.name}</h3>
-                    <p className="text-slate-600 text-sm">{p.role}</p>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </section>
+
 
             {/* Stats */}
             <section className="mb-12">
               <div className="grid md:grid-cols-4 gap-6">
-                <div className="bg-gradient-to-br from-slate-800 to-slate-700 text-white rounded-xl p-6 text-center shadow-lg hover:shadow-xl transition-shadow">
-                  <div className="text-4xl font-bold mb-2">500+</div>
-                  <p className="text-sm font-medium">Aktif Sporcu</p>
+                {/* Kart 1 */}
+                <div className="
+      relative rounded-2xl p-6 text-center
+      shadow-[0_24px_60px_rgba(0,0,0,0.6)]
+      ring-1 ring-white/10
+      bg-[radial-gradient(circle_at_20%_20%,rgba(234,179,8,0.18)_0%,rgba(0,0,0,0)_60%),radial-gradient(circle_at_80%_80%,rgba(30,79,188,0.22)_0%,rgba(0,0,0,0)_60%)]
+      "
+                  style={{ backgroundColor: "#0a1a3a" }}
+                >
+                  {/* glow dekor */}
+                  <div className="pointer-events-none absolute -top-10 -right-10 h-24 w-24 rounded-full bg-[#eab308]/30 blur-3xl opacity-40" />
+                  <div className="pointer-events-none absolute -bottom-10 -left-10 h-24 w-24 rounded-full bg-[#1E4FBC]/30 blur-3xl opacity-30" />
+
+                  <div className="relative z-10 text-[#eab308] text-4xl font-semibold leading-none tracking-[-0.03em] mb-2 drop-shadow-[0_2px_6px_rgba(0,0,0,0.8)]">
+                    500+
+                  </div>
+                  <p className="relative z-10 text-[13px] font-medium text-white/80 leading-snug">
+                    Aktif Sporcu
+                  </p>
                 </div>
-                <div className="bg-gradient-to-br from-emerald-600 to-emerald-700 text-white rounded-xl p-6 text-center shadow-lg hover:shadow-xl transition-shadow">
-                  <div className="text-4xl font-bold mb-2">15+</div>
-                  <p className="text-sm font-medium">Deneyimli Antrenör</p>
+
+                {/* Kart 2 */}
+                <div className="
+      relative rounded-2xl p-6 text-center
+      shadow-[0_24px_60px_rgba(0,0,0,0.6)]
+      ring-1 ring-white/10
+      bg-[radial-gradient(circle_at_20%_20%,rgba(234,179,8,0.18)_0%,rgba(0,0,0,0)_60%),radial-gradient(circle_at_80%_80%,rgba(30,79,188,0.22)_0%,rgba(0,0,0,0)_60%)]
+      "
+                  style={{ backgroundColor: "#0a1a3a" }}
+                >
+                  <div className="pointer-events-none absolute -top-10 -right-10 h-24 w-24 rounded-full bg-[#eab308]/30 blur-3xl opacity-40" />
+                  <div className="pointer-events-none absolute -bottom-10 -left-10 h-24 w-24 rounded-full bg-[#1E4FBC]/30 blur-3xl opacity-30" />
+
+                  <div className="relative z-10 text-[#eab308] text-4xl font-semibold leading-none tracking-[-0.03em] mb-2 drop-shadow-[0_2px_6px_rgba(0,0,0,0.8)]">
+                    15+
+                  </div>
+                  <p className="relative z-10 text-[13px] font-medium text-white/80 leading-snug">
+                    Deneyimli Antrenör
+                  </p>
                 </div>
-                <div className="bg-gradient-to-br from-orange-600 to-orange-700 text-white rounded-xl p-6 text-center shadow-lg hover:shadow-xl transition-shadow">
-                  <div className="text-4xl font-bold mb-2">3</div>
-                  <p className="text-sm font-medium">Spor Branşı</p>
+
+                {/* Kart 3 */}
+                <div className="
+      relative rounded-2xl p-6 text-center
+      shadow-[0_24px_60px_rgba(0,0,0,0.6)]
+      ring-1 ring-white/10
+      bg-[radial-gradient(circle_at_20%_20%,rgba(234,179,8,0.18)_0%,rgba(0,0,0,0)_60%),radial-gradient(circle_at_80%_80%,rgba(30,79,188,0.22)_0%,rgba(0,0,0,0)_60%)]
+      "
+                  style={{ backgroundColor: "#0a1a3a" }}
+                >
+                  <div className="pointer-events-none absolute -top-10 -right-10 h-24 w-24 rounded-full bg-[#eab308]/30 blur-3xl opacity-40" />
+                  <div className="pointer-events-none absolute -bottom-10 -left-10 h-24 w-24 rounded-full bg-[#1E4FBC]/30 blur-3xl opacity-30" />
+
+                  <div className="relative z-10 text-[#eab308] text-4xl font-semibold leading-none tracking-[-0.03em] mb-2 drop-shadow-[0_2px_6px_rgba(0,0,0,0.8)]">
+                    3
+                  </div>
+                  <p className="relative z-10 text-[13px] font-medium text-white/80 leading-snug">
+                    Spor Branşı
+                  </p>
                 </div>
-                <div className="bg-gradient-to-br from-[#EAB308] to-[#FACC15] text-slate-900 rounded-xl p-6 text-center shadow-lg hover:shadow-xl transition-shadow">
-                  <div className="text-4xl font-bold mb-2">50+</div>
-                  <p className="text-sm font-medium">Kazanılan Ödül</p>
+
+                {/* Kart 4 */}
+                <div className="
+      relative rounded-2xl p-6 text-center
+      shadow-[0_24px_60px_rgba(0,0,0,0.6)]
+      ring-1 ring-white/10
+      bg-[radial-gradient(circle_at_20%_20%,rgba(234,179,8,0.18)_0%,rgba(0,0,0,0)_60%),radial-gradient(circle_at_80%_80%,rgba(30,79,188,0.22)_0%,rgba(0,0,0,0)_60%)]
+      "
+                  style={{ backgroundColor: "#0a1a3a" }}
+                >
+                  <div className="pointer-events-none absolute -top-10 -right-10 h-24 w-24 rounded-full bg-[#eab308]/30 blur-3xl opacity-40" />
+                  <div className="pointer-events-none absolute -bottom-10 -left-10 h-24 w-24 rounded-full bg-[#1E4FBC]/30 blur-3xl opacity-30" />
+
+                  <div className="relative z-10 text-[#eab308] text-4xl font-semibold leading-none tracking-[-0.03em] mb-2 drop-shadow-[0_2px_6px_rgba(0,0,0,0.8)]">
+                    50+
+                  </div>
+                  <p className="relative z-10 text-[13px] font-medium text-white/80 leading-snug">
+                    Kazanılan Ödül
+                  </p>
                 </div>
               </div>
             </section>
+
           </div>
         </main>
       </GridShell>
