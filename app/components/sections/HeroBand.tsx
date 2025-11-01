@@ -34,7 +34,6 @@ export default function HeroBand({
       className={clsx(
         'relative isolate text-white border-b border-black/10',
         'bg-gradient-to-br from-[#1e3a8a] via-[#1d4ed8] to-[#1e40af]',
-        'dark:from-[#0b173b] dark:via-[#122b67] dark:to-[#0f2156]',
         className
       )}
     >
@@ -44,7 +43,6 @@ export default function HeroBand({
         className="
           pointer-events-none absolute inset-0 -z-10
           bg-[radial-gradient(900px_600px_at_50%_-200px,rgba(255,255,255,0.14),transparent)]
-          dark:bg-[radial-gradient(900px_600px_at_50%_-200px,rgba(255,255,255,0.10),transparent)]
         "
       />
       {/* ince grid doku (opsiyonel) */}
@@ -56,7 +54,6 @@ export default function HeroBand({
             bg-[linear-gradient(#fff_1px,transparent_1px),linear-gradient(90deg,#fff_1px,transparent_1px)]
             bg-[size:28px_28px]
             [mask-image:radial-gradient(85%_70%_at_50%_40%,#000_60%,transparent_100%)]
-            dark:opacity-[0.06]
           "
         />
       )}

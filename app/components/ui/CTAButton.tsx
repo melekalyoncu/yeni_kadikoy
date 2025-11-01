@@ -33,7 +33,7 @@ export default function CTAButton({
     'will-change-transform overflow-hidden',
     'hover:-translate-y-0.5 hover:shadow-xl active:translate-y-0 active:shadow-md',
     'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2',
-    'focus-visible:ring-offset-white dark:focus-visible:ring-offset-neutral-900',
+    'focus-visible:ring-offset-white',
     sizing
   );
 

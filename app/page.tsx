@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import HeroSlider from "./components/sections/HeroSlider";
@@ -17,7 +17,6 @@ const fadeUp = {
 };
 
 // --- SECTION HEADER ---
-// Daha kulüp kurumsal: üstte küçük label hissi, altında büyük başlık.
 function SectionHeader({
   title,
   subtitle,
@@ -27,45 +26,30 @@ function SectionHeader({
 }) {
   return (
     <div className="text-center mb-10 md:mb-14">
-      {/* başlık + yan şeritler */}
       <motion.div
         variants={fadeUp}
         className="flex items-center justify-center gap-3 md:gap-4"
       >
-        {/* sol şerit */}
-        <span
-          className="
-        h-[2px] w-8 md:w-10 rounded-full
-        bg-gradient-to-r from-[#eab308] to-[#c2410c]
-      "
-        />
+        <span className="h-[2px] w-8 md:w-10 rounded-full bg-gradient-to-r from-[#eab308] to-[#c2410c]" />
 
-        {/* başlık */}
         <motion.h2
           variants={fadeUp}
           className="
-    text-2xl md:text-4xl
-    font-medium italic
-    tracking-[-0.03em]
-    bg-gradient-to-r from-[#eab308] to-[#c2410c]
-    text-transparent bg-clip-text
-    drop-shadow-[0_1px_1px_rgba(0,0,0,0.2)]
-    pr-1
-  "
-                  >
+            text-2xl md:text-4xl
+            font-medium italic
+            tracking-[-0.03em]
+            bg-gradient-to-r from-[#eab308] to-[#c2410c]
+            text-transparent bg-clip-text
+            drop-shadow-[0_1px_1px_rgba(0,0,0,0.2)]
+            pr-1
+          "
+        >
           {title}
         </motion.h2>
 
-        {/* sağ şerit */}
-        <span
-          className="
-        h-[2px] w-8 md:w-10 rounded-full
-        bg-gradient-to-r from-[#eab308] to-[#c2410c]
-      "
-        />
+        <span className="h-[2px] w-8 md:w-10 rounded-full bg-gradient-to-r from-[#eab308] to-[#c2410c]" />
       </motion.div>
 
-      {/* alt açıklama */}
       {subtitle && (
         <motion.p
           variants={fadeUp}
@@ -75,14 +59,10 @@ function SectionHeader({
         </motion.p>
       )}
     </div>
-
-
   );
 }
 
-// --- CARD SHELL ---
-// Çerçeve degrade bizde güzel ama içi çok koyu blok gibiydi,
-// biraz daha premium his: kenar glow + içeride camimsi koyu kutu.
+// --- CARD SHELL (şu an sayfada direkt kullanılmıyor ama kalsın ilerisi için)
 function CardShell({
   children,
   className = "",
@@ -101,40 +81,205 @@ function CardShell({
   );
 }
 
-// --- MEDIA TILE ---
-// Küçük hover-scale tamam ama biraz spor kulübü vibe'ı ekleyelim: çerçeve/border hafif neon hat.
-function MediaTile({ item }: { item: MediaItem }) {
+/* =========================================================
+   MEDIA CAROUSEL
+   - Otomatik kayan slider
+   - Hover'da next/prev butonu ve info overlay'i çıkıyor
+   - Altında nokta indicator'ları var
+   ========================================================= */
+function MediaCarousel({
+  items,
+}: {
+  items: MediaItem[];
+}) {
+  // elimizdeki görselleri normalize edelim
+  // fileUrl'leri direkt slider görseli olarak kullanıyoruz.
+  const slides = useMemo(
+    () =>
+      items.map((m) => ({
+        src: m.fileUrl,
+        alt: m.fileName,
+      })),
+    [items]
+  );
+
+  const [index, setIndex] = useState(0);
+
+  // otomatik geçiş
+  useEffect(() => {
+    if (slides.length <= 1) return;
+    const id = setInterval(() => {
+      setIndex((prev) => {
+        const next = prev + 1;
+        return next >= slides.length ? 0 : next;
+      });
+    }, 3000);
+    return () => clearInterval(id);
+  }, [slides.length]);
+
+  const goPrev = () => {
+    setIndex((prev) => {
+      if (prev === 0) return slides.length - 1;
+      return prev - 1;
+    });
+  };
+
+  const goNext = () => {
+    setIndex((prev) => {
+      const next = prev + 1;
+      return next >= slides.length ? 0 : next;
+    });
+  };
+
+  if (slides.length === 0) {
+    return (
+      <div className="text-center py-12">
+        <div className="text-6xl mb-4">📸</div>
+        <p className="text-slate-600 text-sm font-medium">
+          Henüz medya eklenmemiş
+        </p>
+      </div>
+    );
+  }
+
   return (
     <motion.div
+      initial="hidden"
+      whileInView="show"
+      viewport={{ once: true, amount: 0.2 }}
       variants={fadeUp}
-      whileHover={{ scale: 1.04 }}
-      className="group"
+      className="
+        relative
+        w-full
+        max-w-4xl
+        mx-auto
+        group
+      "
     >
-      <div className="relative rounded-xl overflow-hidden aspect-square shadow-[0_16px_40px_rgba(0,0,0,0.3)] ring-1 ring-black/10">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={item.fileUrl}
-          alt={item.fileName}
-          className="w-full h-full object-cover"
-        />
+      {/* SLIDE WRAPPER */}
+      <div
+        className="
+          relative
+          overflow-hidden
+          rounded-2xl
+          shadow-[0_24px_60px_rgba(0,0,0,0.45)]
+          ring-1 ring-black/20
+          bg-black
+          aspect-[4/3]
+        "
+      >
+        {/* SLIDES */}
+        {slides.map((img, i) => (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            key={i}
+            src={img.src}
+            alt={img.alt}
+            className={`
+              absolute inset-0 w-full h-full object-cover
+              transition-opacity duration-500 ease-in-out
+              ${i === index ? "opacity-100" : "opacity-0"}
+            `}
+          />
+        ))}
 
-        {/* hafif alt gradient overlay */}
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/40 via-black/0 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-
-        {/* alt badge style */}
-        <div className="pointer-events-none absolute bottom-2 left-2 right-2 flex justify-between items-end opacity-0 group-hover:opacity-100 transition-opacity">
-          <span className="text-[10px] font-semibold text-white/90 bg-black/40 backdrop-blur-sm px-2 py-1 rounded-lg ring-1 ring-white/20">
-            Kadıköy Spor Arşivi
-          </span>
-          <span className="text-[10px] font-medium text-white/80">
-            📷 Medya
-          </span>
+        {/* ALPHA OVERLAY / BİLGİ BADGE */}
+        <div
+          className="
+            pointer-events-none
+            absolute inset-0
+            flex flex-col justify-end
+            bg-gradient-to-t from-black/50 via-black/0 to-transparent
+            opacity-0 group-hover:opacity-100
+            transition-opacity
+            p-4
+          "
+        >
+          <div className="flex items-end justify-between gap-2">
+            <span className="text-[11px] font-semibold text-white/90 bg-black/40 backdrop-blur-sm px-2 py-1 rounded-lg ring-1 ring-white/20">
+              Kadıköy Spor Arşivi
+            </span>
+            <span className="text-[11px] font-medium text-white/80">
+              📷 Medya
+            </span>
+          </div>
         </div>
+
+        {/* SOL-OK / SAĞ-OK */}
+        {slides.length > 1 && (
+          <>
+            <button
+              type="button"
+              onClick={goPrev}
+              className="
+                absolute left-2 top-1/2 -translate-y-1/2
+                opacity-0 group-hover:opacity-100
+                transition-opacity
+                inline-flex items-center justify-center
+                h-9 w-9 rounded-lg
+                bg-black/40 text-white
+                ring-1 ring-white/20
+                backdrop-blur-sm
+                text-xs font-semibold
+                hover:bg-black/60
+              "
+              aria-label="Önceki fotoğraf"
+            >
+              ‹
+            </button>
+
+            <button
+              type="button"
+              onClick={goNext}
+              className="
+                absolute right-2 top-1/2 -translate-y-1/2
+                opacity-0 group-hover:opacity-100
+                transition-opacity
+                inline-flex items-center justify-center
+                h-9 w-9 rounded-lg
+                bg-black/40 text-white
+                ring-1 ring-white/20
+                backdrop-blur-sm
+                text-xs font-semibold
+                hover:bg-black/60
+              "
+              aria-label="Sonraki fotoğraf"
+            >
+              ›
+            </button>
+          </>
+        )}
       </div>
+
+      {/* DOT INDICATORS */}
+      {slides.length > 1 && (
+        <div className="flex items-center justify-center gap-1.5 mt-4">
+          {slides.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setIndex(i)}
+              className={`
+                h-2 w-2 rounded-full
+                ring-1 ring-slate-900/20
+                dark:ring-white/20
+                ${
+                  i === index
+                    ? "bg-[#2563eb] shadow-[0_0_8px_rgba(37,99,235,0.8)]"
+                    : "bg-slate-300 dark:bg-slate-600"
+                }
+              `}
+              aria-label={`Slide ${i + 1}`}
+            />
+          ))}
+        </div>
+      )}
     </motion.div>
   );
 }
 
+/* =========================================================
+   ANA SAYFA
+   ========================================================= */
 export default function Home() {
   // Medya verileri
   const { media, isLoading: loadingMedia } = useGallery();
@@ -154,7 +299,9 @@ export default function Home() {
   }, []);
 
   // Homepage limitler
-  const mediaGallery = isMounted ? media.slice(0, 6) : [];
+  // mediaGallery: carousel gösterimi için tüm liste
+  // (istersen burayı slice(0,10) vs yapıp sınırlayabilirsin)
+  const mediaGallery = isMounted ? media : [];
   const news = isMounted ? newsData.slice(0, 3) : [];
 
   return (
@@ -163,9 +310,9 @@ export default function Home() {
       <HeroSlider />
 
       <div className="w-full py-16 md:py-24">
-        {/* responsive layout:
-           lg: 12 kolon -> 2 / 8 / 2
-           mobilde tek kolon
+        {/*
+          lg: 12 kolon -> 2 / 8 / 2
+          mobilde tek kolon
         */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
           {/* SOL SPONSOR */}
@@ -228,20 +375,17 @@ export default function Home() {
                     </Link>
                   </motion.div>
 
-                  {/* başarı kartı */}
+                  {/* başarı / kulüp kartı */}
                   <motion.div variants={fadeUp} className="max-w-sm mx-auto">
-                    {/* Outer frame with subtle club gradient */}
                     <div className="relative rounded-2xl p-[1px] bg-gradient-to-br from-[#1E4FBC]/50 via-[#eab308]/40 to-[#1E4FBC]/10 shadow-[0_24px_80px_rgba(0,0,0,0.5)]">
-                      {/* Inner card */}
-                      <div className="relative rounded-2xl overflow-hidden text-white flex flex-col items-center text-center px-6 py-8 shadow-[0_32px_80px_rgba(0,0,0,0.8)] border border-white/10 bg-[radial-gradient(circle_at_20%_20%,rgba(234,179,8,0.18)_0%,rgba(0,0,0,0)_60%),radial-gradient(circle_at_80%_80%,rgba(30,79,188,0.22)_0%,rgba(0,0,0,0)_60%)]"
+                      <div
+                        className="relative rounded-2xl overflow-hidden text-white flex flex-col items-center text-center px-6 py-8 shadow-[0_32px_80px_rgba(0,0,0,0.8)] border border-white/10 bg-[radial-gradient(circle_at_20%_20%,rgba(234,179,8,0.18)_0%,rgba(0,0,0,0)_60%),radial-gradient(circle_at_80%_80%,rgba(30,79,188,0.22)_0%,rgba(0,0,0,0)_60%)]"
                         style={{
                           backgroundColor: "#0a1a3a",
-                          backgroundImage:
-                            `radial-gradient(circle at 20% 20%, rgba(234,179,8,0.18) 0%, rgba(0,0,0,0) 60%),
-           radial-gradient(circle at 80% 80%, rgba(30,79,188,0.22) 0%, rgba(0,0,0,0) 60%)`,
+                          backgroundImage: `radial-gradient(circle at 20% 20%, rgba(234,179,8,0.18) 0%, rgba(0,0,0,0) 60%),
+                            radial-gradient(circle at 80% 80%, rgba(30,79,188,0.22) 0%, rgba(0,0,0,0) 60%)`,
                         }}
                       >
-                        {/* hafif koyu-mavi -> lacivert degrade overlay */}
                         <div
                           className="pointer-events-none absolute inset-0 opacity-[0.6] mix-blend-screen"
                           style={{
@@ -250,10 +394,8 @@ export default function Home() {
                           }}
                         />
 
-                        {/* ekstra glow halkaları */}
                         <div className="pointer-events-none absolute -top-16 -right-16 h-32 w-32 rounded-full bg-[#eab308]/30 blur-3xl opacity-40" />
                         <div className="pointer-events-none absolute -bottom-16 -left-16 h-32 w-32 rounded-full bg-[#1E4FBC]/30 blur-3xl opacity-30" />
-
 
                         <div className="relative h-20 w-20 md:h-24 md:w-24 rounded-full bg-white ring-2 ring-[#eab308] shadow-[0_20px_40px_rgba(234,179,8,0.5)] flex items-center justify-center overflow-hidden">
                           <img
@@ -263,14 +405,10 @@ export default function Home() {
                           />
                         </div>
 
-
-
-                        {/* Başlık */}
                         <h3 className="relative z-10 mt-6 text-lg md:text-xl font-semibold italic tracking-[-0.03em] text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.7)]">
                           Yeni Kadıköy Spor Kulübü
                         </h3>
 
-                        {/* Bilgiler */}
                         <div className="relative z-10 mt-4 text-[12px] md:text-[13px] text-neutral-200 leading-relaxed font-medium flex flex-col gap-3">
                           <div className="flex flex-col">
                             <span className="text-white font-semibold text-[13px] md:text-[14px] leading-none">
@@ -300,7 +438,6 @@ export default function Home() {
                           </div>
                         </div>
 
-                        {/* CTA mini */}
                         <Link
                           href="/hakkimizda"
                           className="relative z-10 mt-6 inline-flex items-center gap-2 text-[12px] font-semibold text-[#eab308] hover:text-white transition-colors"
@@ -310,8 +447,6 @@ export default function Home() {
                       </div>
                     </div>
                   </motion.div>
-
-
                 </motion.div>
               </section>
 
@@ -370,24 +505,42 @@ export default function Home() {
                       Yükleniyor...
                     </p>
                   </div>
-                ) : mediaGallery.length > 0 ? (
-                  <motion.div
-                    initial="hidden"
-                    whileInView="show"
-                    viewport={{ once: true, amount: 0.2 }}
-                    className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6"
-                  >
-                    {mediaGallery.map((m) => (
-                      <MediaTile key={m.fileName} item={m} />
-                    ))}
-                  </motion.div>
                 ) : (
-                  <div className="text-center py-12">
-                    <div className="text-6xl mb-4">📸</div>
-                    <p className="text-slate-600 text-sm font-medium">
-                      Henüz medya eklenmemiş
-                    </p>
-                  </div>
+                  <>
+                    {/* Carousel */}
+                    <MediaCarousel items={mediaGallery} />
+
+                    {/* Tümünü Gör Butonu */}
+                    {mediaGallery.length > 0 && (
+                      <motion.div
+                        initial="hidden"
+                        whileInView="show"
+                        viewport={{ once: true, amount: 0.2 }}
+                        variants={fadeUp}
+                        className="mt-10 text-center"
+                      >
+                        <Link
+                          href="/galeri"
+                          className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl bg-gradient-to-r from-[#1E4FBC] to-[#183E93] text-white font-semibold shadow-[0_8px_24px_rgba(30,79,188,0.4)] hover:shadow-[0_12px_32px_rgba(24,62,147,0.6)] hover:-translate-y-0.5 transition-all"
+                        >
+                          <svg
+                            className="w-5 h-5"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                            />
+                          </svg>
+                          Tüm Galeriyi Gör ({mediaGallery.length} Fotoğraf)
+                        </Link>
+                      </motion.div>
+                    )}
+                  </>
                 )}
               </section>
 

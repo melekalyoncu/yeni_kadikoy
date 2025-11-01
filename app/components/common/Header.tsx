@@ -26,6 +26,7 @@ export default function Header() {
       { href: "/", label: "ANA SAYFA" },
       { href: "/hakkimizda", label: "HAKKIMIZDA" },
       { href: "/haberler", label: "HABERLER" },
+      { href: "/galeri", label: "GALERİ" },
       { href: "/iletisim", label: "İLETİŞİM" },
       { href: "/kayit", label: "KAYIT OL" },
     ],
