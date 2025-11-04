@@ -197,7 +197,7 @@ function MediaCarousel({
         >
           <div className="flex items-end justify-between gap-2">
             <span className="text-[11px] font-semibold text-white/90 bg-black/40 backdrop-blur-sm px-2 py-1 rounded-lg ring-1 ring-white/20">
-              Kadıköy Spor Arşivi
+              Yeni Kadıköy Spor Arşivi
             </span>
             <span className="text-[11px] font-medium text-white/80">
               📷 Medya
@@ -339,7 +339,7 @@ export default function Home() {
                   {/* metin */}
                   <motion.div variants={fadeUp} className="space-y-5">
                     <p className="text-base md:text-lg leading-relaxed text-slate-600 font-medium">
-                      Kadıköy Spor Kulübü olarak hedefimiz; çocuklara ve
+                      Yeni Kadıköy Spor Kulübü olarak hedefimiz; çocuklara ve
                       gençlere spor alışkanlığı kazandırmak, disiplinli ve
                       sağlıklı bir yaşam kültürü oluşturmaktır.
                     </p>

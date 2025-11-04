@@ -8,7 +8,7 @@ export default function HakkimizdaPage() {
       <HeroBand
         pill="Hakkımızda • Kulüp Kimliği"
         title="HAKKIMIZDA"
-        subtitle="Kadıköy Spor Kulübü — Geleceğin Şampiyonlarını Yetiştiriyoruz"
+        subtitle="Yeni Kadıköy Spor Kulübü — Geleceğin Şampiyonlarını Yetiştiriyoruz"
       />
 
       <GridShell>
@@ -20,7 +20,7 @@ export default function HakkimizdaPage() {
             <section className="mb-12 bg-slate-50 rounded-xl shadow-sm border border-slate-200 p-8 hover:shadow-md transition-shadow">
               <h2 className="text-3xl font-bold text-slate-900 mb-6">Misyonumuz</h2>
               <p className="text-slate-700 leading-relaxed mb-4">
-                Kadıköy Spor Kulübü olarak, gençlerimize spor yapma imkanı sunarak sağlıklı
+                Yeni Kadıköy Spor Kulübü olarak, gençlerimize spor yapma imkanı sunarak sağlıklı
                 nesiller yetiştirmeyi hedefliyoruz. Voleybol, basketbol ve okçuluk branşlarında
                 profesyonel eğitim vererek sporcularımızın hem fiziksel hem de zihinsel
                 gelişimlerine katkı sağlıyoruz.

@@ -60,7 +60,7 @@ export default function VoleybolPage() {
             <section className="mb-8 md:mb-12 bg-slate-50 rounded-xl shadow-sm border border-slate-200 p-6 md:p-8">
               <h2 className="text-2xl md:text-3xl font-bold text-slate-800 mb-4 md:mb-6">Voleybol Branşımız Hakkında</h2>
               <p className="text-slate-700 leading-relaxed mb-3">
-                Kadıköy Spor Kulübü voleybol branşı, deneyimli antrenörler ve modern tesislerle
+                Yeni Kadıköy Spor Kulübü voleybol branşı, deneyimli antrenörler ve modern tesislerle
                 gençlerimize kaliteli voleybol eğitimi sunmaktadır. Farklı yaş gruplarına özel
                 programlarımızla sporcularımızın gelişimini destekliyoruz.
               </p>

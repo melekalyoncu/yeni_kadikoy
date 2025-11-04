@@ -41,7 +41,7 @@ export default function Footer() {
 
       {/* Main Footer */}
       <div className="container mx-auto px-4 py-8 md:py-10">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 md:gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-6">
           {/* Logo & About */}
           <div>
             <div className="flex items-center gap-3 mb-3">
@@ -105,20 +105,20 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="/galeri"
+                  href="/kamplar"
                   className="group inline-flex items-center gap-2 text-blue-100/90 hover:text-[#FFD700] transition"
                 >
                   <span className="inline-block w-1.5 h-1.5 rounded-full bg-white/30 group-hover:bg-[#FFD700] transition" />
-                  Galeri
+                  Kamplarımız
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/iletisim"
+                  href="/magaza"
                   className="group inline-flex items-center gap-2 text-blue-100/90 hover:text-[#FFD700] transition"
                 >
                   <span className="inline-block w-1.5 h-1.5 rounded-full bg-white/30 group-hover:bg-[#FFD700] transition" />
-                  İletişim
+                  Mağaza
                 </Link>
               </li>
               <li>
@@ -270,11 +270,11 @@ export default function Footer() {
               &copy; 2025 Yeni Kadıköy Spor Kulübü. Tüm hakları saklıdır.
             </p>
             <div className="flex gap-5">
-              <Link href="#" className="hover:text-[#1E4FBC] transition">
-                Gizlilik Politikası
+              <Link href="/kayit/sozlesmeler" className="hover:text-[#1E4FBC] transition">
+                Sözleşmelerimiz
               </Link>
-              <Link href="#" className="hover:text-[#1E4FBC] transition">
-                Kullanım Koşulları
+              <Link href="/hakkimizda/sss" className="hover:text-[#1E4FBC] transition">
+                SSS
               </Link>
             </div>
           </div>

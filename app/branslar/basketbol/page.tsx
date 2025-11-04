@@ -46,7 +46,7 @@ export default function BasketbolPage() {
             {/* About */}
             <InfoSection title="Basketbol Branşımız Hakkında">
               <p className="text-slate-700 leading-relaxed mb-3">
-                Kadıköy Spor Kulübü basketbol branşı, modern tesisleri ve deneyimli antrenör
+                Yeni Kadıköy Spor Kulübü basketbol branşı, modern tesisleri ve deneyimli antrenör
                 kadrosuyla gençlerimize en iyi basketbol eğitimini sunmaktadır. Her yaş grubuna
                 özel programlarımızla sporcularımızın teknik ve fiziksel gelişimini destekliyoruz.
               </p>

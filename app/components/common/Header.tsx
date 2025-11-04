@@ -5,9 +5,16 @@ import Image from "next/image";
 import { useEffect, useState, useMemo } from "react";
 import { usePathname } from "next/navigation";
 
+type MenuItem = {
+  href: string;
+  label: string;
+  submenu?: { href: string; label: string }[];
+};
+
 export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const pathname = usePathname();
 
   useEffect(() => {
@@ -19,16 +26,45 @@ export default function Header() {
 
   useEffect(() => {
     setMobileOpen(false);
+    setOpenDropdown(null);
   }, [pathname]);
 
-  const links = useMemo(
+  const links: MenuItem[] = useMemo(
     () => [
       { href: "/", label: "ANA SAYFA" },
-      { href: "/hakkimizda", label: "HAKKIMIZDA" },
+      {
+        href: "/hakkimizda",
+        label: "HAKKIMIZDA",
+        submenu: [
+          { href: "/hakkimizda", label: "Genel Bilgi" },
+          { href: "/hakkimizda/neden-yeni-kadikoy", label: "Neden Biz?" },
+          { href: "/hakkimizda/tuzuk", label: "Tüzük" },
+          { href: "/hakkimizda/sosyal-sorumluluk", label: "Sosyal Sorumluluk" },
+          { href: "/hakkimizda/basinda-biz", label: "Basında Biz" },
+          { href: "/hakkimizda/sss", label: "SSS" },
+        ]
+      },
       { href: "/haberler", label: "HABERLER" },
+      {
+        href: "/branslar/voleybol",
+        label: "BRANŞLAR",
+        submenu: [
+          { href: "/branslar/voleybol", label: "🏐 Voleybol" },
+          { href: "/branslar/basketbol", label: "🏀 Basketbol" },
+          { href: "/branslar/okculuk", label: "🎯 Okçuluk" },
+        ]
+      },
+      { href: "/kamplar", label: "KAMPLAR" },
       { href: "/galeri", label: "GALERİ" },
+      {
+        href: "/kayit",
+        label: "KAYIT",
+        submenu: [
+          { href: "/kayit", label: "Kayıt Ol" },
+          { href: "/kayit/sozlesmeler", label: "Sözleşmeler" },
+        ]
+      },
       { href: "/iletisim", label: "İLETİŞİM" },
-      { href: "/kayit", label: "KAYIT OL" },
     ],
     []
   );
@@ -70,16 +106,76 @@ export default function Header() {
           </Link>
 
           {/* Desktop Nav */}
-          <nav className="hidden md:flex items-center gap-6">
-            {links.map((l) => (
-              <NavLink key={l.href} href={l.href} active={isActive(l.href)}>
-                {l.label}
-              </NavLink>
+          <nav className="hidden lg:flex items-center gap-4">
+            {links.map((item) => (
+              item.submenu ? (
+                <div
+                  key={item.href}
+                  className="relative group"
+                  onMouseEnter={() => setOpenDropdown(item.label)}
+                  onMouseLeave={() => setOpenDropdown(null)}
+                >
+                  <button
+                    className={[
+                      "relative font-semibold transition focus:outline-none px-2 py-1.5 rounded-lg",
+                      isActive(item.href)
+                        ? "text-slate-900 bg-yellow-50"
+                        : "text-slate-700 hover:text-slate-900 hover:bg-slate-50",
+                    ].join(" ")}
+                  >
+                    <span className="flex items-center gap-1 text-sm">
+                      {item.label}
+                      <svg
+                        className={[
+                          "w-3.5 h-3.5 transition-transform duration-200",
+                          openDropdown === item.label ? "rotate-180" : ""
+                        ].join(" ")}
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </span>
+                  </button>
+
+                  {/* Dropdown */}
+                  <div
+                    className={[
+                      "absolute top-full left-0 mt-1 w-56 bg-white rounded-xl shadow-2xl border border-slate-200 overflow-hidden z-50",
+                      "transition-all duration-200 origin-top",
+                      openDropdown === item.label
+                        ? "opacity-100 scale-100 visible"
+                        : "opacity-0 scale-95 invisible"
+                    ].join(" ")}
+                  >
+                    <div className="py-2">
+                      {item.submenu.map((subitem, idx) => (
+                        <Link
+                          key={subitem.href}
+                          href={subitem.href}
+                          className={[
+                            "block px-4 py-2.5 text-sm text-slate-700 hover:bg-gradient-to-r hover:from-blue-50 hover:to-yellow-50 hover:text-[#1E4FBC] transition-all",
+                            "border-l-2 border-transparent hover:border-[#1E4FBC]",
+                            idx !== 0 ? "border-t border-slate-100" : ""
+                          ].join(" ")}
+                        >
+                          {subitem.label}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <NavLink key={item.href} href={item.href} active={isActive(item.href)}>
+                  {item.label}
+                </NavLink>
+              )
             ))}
           </nav>
 
           {/* Mobile: menu */}
-          <div className="md:hidden flex items-center gap-2">
+          <div className="lg:hidden flex items-center gap-2">
             <button
               onClick={() => setMobileOpen((v) => !v)}
               aria-label="Menüyü aç/kapat"
@@ -111,23 +207,60 @@ export default function Header() {
         {/* Mobile Menu */}
         <div
           className={[
-            "md:hidden overflow-hidden transition-[max-height,opacity] duration-300 ease-out",
-            mobileOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0",
+            "lg:hidden overflow-hidden transition-all duration-300 ease-out",
+            mobileOpen ? "max-h-[800px] opacity-100" : "max-h-0 opacity-0",
           ].join(" ")}
         >
-          <nav className="mb-3 grid gap-2 rounded-2xl border border-slate-200 bg-slate-50 p-3 shadow-lg">
-            {links.map((l) => (
-              <Link
-                key={l.href}
-                href={l.href}
-                className={[
-                  "rounded-lg px-4 py-2 font-semibold transition",
-                  "hover:bg-slate-100",
-                  isActive(l.href) ? "text-slate-900 bg-yellow-50" : "text-slate-700",
-                ].join(" ")}
-              >
-                {l.label}
-              </Link>
+          <nav className="mb-3 rounded-2xl border border-slate-200 bg-white shadow-xl overflow-hidden">
+            {links.map((item, idx) => (
+              <div key={item.href} className={idx !== 0 ? "border-t border-slate-100" : ""}>
+                <Link
+                  href={item.href}
+                  onClick={(e) => {
+                    if (item.submenu) {
+                      e.preventDefault();
+                      setOpenDropdown(openDropdown === item.label ? null : item.label);
+                    }
+                  }}
+                  className={[
+                    "px-4 py-3 font-semibold transition flex items-center justify-between",
+                    "hover:bg-gradient-to-r hover:from-blue-50 hover:to-yellow-50",
+                    isActive(item.href) ? "text-[#1E4FBC] bg-blue-50" : "text-slate-700",
+                  ].join(" ")}
+                >
+                  <span className="text-sm">{item.label}</span>
+                  {item.submenu && (
+                    <svg
+                      className={[
+                        "w-4 h-4 transition-transform duration-200",
+                        openDropdown === item.label ? "rotate-180" : ""
+                      ].join(" ")}
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  )}
+                </Link>
+                {item.submenu && openDropdown === item.label && (
+                  <div className="bg-slate-50 border-t border-slate-100">
+                    {item.submenu.map((subitem, subIdx) => (
+                      <Link
+                        key={subitem.href}
+                        href={subitem.href}
+                        className={[
+                          "block px-6 py-2.5 text-sm text-slate-600 hover:bg-white hover:text-[#1E4FBC] transition",
+                          "border-l-2 border-transparent hover:border-[#1E4FBC]",
+                          subIdx !== item.submenu!.length - 1 ? "border-b border-slate-200" : ""
+                        ].join(" ")}
+                      >
+                        {subitem.label}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
             ))}
           </nav>
         </div>
@@ -149,21 +282,13 @@ function NavLink({
     <Link
       href={href}
       className={[
-        "group relative font-semibold transition focus:outline-none",
-        active ? "text-slate-900" : "text-slate-700 hover:text-slate-900",
+        "font-semibold transition focus:outline-none px-2 py-1.5 rounded-lg text-sm",
+        active
+          ? "text-slate-900 bg-yellow-50"
+          : "text-slate-700 hover:text-slate-900 hover:bg-slate-50",
       ].join(" ")}
     >
-      <span className="px-1.5 py-1">{children}</span>
-      {/* underline */}
-      <span
-        aria-hidden="true"
-        className={[
-          "pointer-events-none absolute -bottom-1 left-0 h-[2px] w-full origin-left scale-x-0",
-          "bg-gradient-to-r from-[#facc15] via-[#f59e0b] to-[#ea580c]",
-          "transition-transform duration-300",
-          active ? "scale-x-100" : "group-hover:scale-x-100",
-        ].join(" ")}
-      />
+      {children}
     </Link>
   );
 }

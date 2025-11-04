@@ -45,7 +45,7 @@ export default function OkculukPage() {
             {/* About */}
             <InfoSection title="Okçuluk Branşımız Hakkında">
               <p className="text-slate-700 leading-relaxed mb-3">
-                Kadıköy Spor Kulübü okçuluk branşı, konsantrasyon, disiplin ve sabır gerektiren
+                Yeni Kadıköy Spor Kulübü okçuluk branşı, konsantrasyon, disiplin ve sabır gerektiren
                 bu özel spor dalında gençlerimize profesyonel eğitim sunmaktadır. Deneyimli
                 antrenörlerimiz ve modern tesislerimizle sporcularımızın gelişimini destekliyoruz.
               </p>
