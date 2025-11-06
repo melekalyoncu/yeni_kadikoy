@@ -95,6 +95,16 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
+                <a
+                  href="/documents/yeni-kadikoy-spor-kulubu-tuzuk.pdf"
+                  download="Yeni-Kadikoy-Spor-Kulubu-Tuzuk.pdf"
+                  className="group inline-flex items-center gap-2 text-blue-100/90 hover:text-[#FFD700] transition"
+                >
+                  <span className="inline-block w-1.5 h-1.5 rounded-full bg-white/30 group-hover:bg-[#FFD700] transition" />
+                  Tüzük (PDF)
+                </a>
+              </li>
+              <li>
                 <Link
                   href="/haberler"
                   className="group inline-flex items-center gap-2 text-blue-100/90 hover:text-[#FFD700] transition"
@@ -265,17 +275,17 @@ export default function Footer() {
       </div>
 
       {/* Bottom Bar */}
-      <div className="border-t border-slate-200">
+      <div className="border-t border-white/10">
         <div className="container mx-auto px-4 py-4">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-3 text-xs text-neutral-500">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-3 text-xs text-blue-100/70">
             <p className="text-center md:text-left">
               &copy; 2025 Yeni Kadıköy Spor Kulübü. Tüm hakları saklıdır.
             </p>
             <div className="flex gap-5">
-              <Link href="/kayit/sozlesmeler" className="hover:text-[#1E4FBC] transition">
+              <Link href="/kayit/sozlesmeler" className="hover:text-[#FFD700] transition">
                 Sözleşmelerimiz
               </Link>
-              <Link href="/hakkimizda/sss" className="hover:text-[#1E4FBC] transition">
+              <Link href="/hakkimizda/sss" className="hover:text-[#FFD700] transition">
                 SSS
               </Link>
             </div>
