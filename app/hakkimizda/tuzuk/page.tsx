@@ -18,11 +18,32 @@ export default function TuzukPage() {
             {/* Giriş */}
             <section className="mb-8">
               <div className="bg-blue-50 rounded-xl shadow-sm border border-blue-200 p-6">
-                <p className="text-slate-700 leading-relaxed">
-                  Yeni Kadıköy Spor Kulübü, 5253 sayılı Dernekler Kanunu ve ilgili mevzuat 
-                  çerçevesinde faaliyet gösteren bir spor kulübüdür. Aşağıda kulübümüzün 
+                <p className="text-slate-700 leading-relaxed mb-4">
+                  Yeni Kadıköy Spor Kulübü, 5253 sayılı Dernekler Kanunu ve ilgili mevzuat
+                  çerçevesinde faaliyet gösteren bir spor kulübüdür. Aşağıda kulübümüzün
                   ana tüzüğü yer almaktadır.
                 </p>
+                <div className="flex gap-3 flex-wrap">
+                  <a
+                    href="/documents/yeni-kadikoy-spor-kulubu-tuzuk.pdf"
+                    download="Yeni-Kadikoy-Spor-Kulubu-Tuzuk.pdf"
+                    className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#1E4FBC] to-[#2563eb] text-white font-semibold rounded-lg shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all"
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    Tüzüğü İndir (PDF)
+                  </a>
+                  <button
+                    onClick={() => window.print()}
+                    className="inline-flex items-center gap-2 px-6 py-3 bg-white text-slate-700 font-semibold rounded-lg shadow-md border border-slate-300 hover:shadow-lg hover:-translate-y-0.5 transition-all"
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+                    </svg>
+                    Yazdır
+                  </button>
+                </div>
               </div>
             </section>
 

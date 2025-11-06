@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import SponsorSidebar from '@/app/components/common/SponsorSidebar';
 import HeroBand from '@/app/components/sections/HeroBand';
-import { useNewsDetail, formatDate, getSportTypeName } from '@/lib/hooks/useNews';
+import { useNewsDetail, formatDate, getNewsTypeName } from '@/lib/hooks/useNews';
 
 const fadeUp = {
   hidden: { opacity: 0, y: 20 },
@@ -108,7 +108,7 @@ export default function NewsDetailPage() {
               <div className="p-8">
                 <div className="flex flex-wrap items-center gap-4 mb-6">
                   <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
-                    {news.sportTypeName}
+                    {news.newsTypeName}
                   </span>
                   <span className="text-slate-500 text-sm flex items-center gap-2">
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

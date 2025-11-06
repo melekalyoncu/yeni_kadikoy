@@ -104,13 +104,17 @@ export default function IletisimPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {[
                 { title: 'Adres', text: 'Kadıköy Spor Kulübü\nKadıköy / İstanbul' },
-                { title: 'Telefon', text: '+90 XXX XXX XX XX' },
-                { title: 'E-posta', text: 'info@kadikoysporkulubu.com' },
+                { title: 'Telefon', text: '0535 227 91 31', link: 'tel:+905352279131' },
+                { title: 'E-posta', text: 'yenikadikoysporkulubu@gmail.com', link: 'mailto:yenikadikoysporkulubu@gmail.com' },
                 { title: 'Çalışma Saatleri', text: 'Hafta içi: 09:00 - 20:00\nCumartesi: 09:00 - 18:00\nPazar: Kapalı' },
-              ].map(({ title, text }, i) => (
+              ].map(({ title, text, link }, i) => (
                 <div key={i} className="bg-slate-50 rounded-xl shadow-sm border border-slate-200 p-6 hover:shadow-md transition-shadow">
                   <p className="text-sm font-semibold text-slate-800 mb-2">{title}</p>
-                  <p className="text-sm whitespace-pre-line text-slate-600">{text}</p>
+                  {link ? (
+                    <a href={link} className="text-sm whitespace-pre-line text-[#1E4FBC] hover:underline">{text}</a>
+                  ) : (
+                    <p className="text-sm whitespace-pre-line text-slate-600">{text}</p>
+                  )}
                 </div>
               ))}
             </div>

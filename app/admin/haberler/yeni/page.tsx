@@ -8,7 +8,7 @@ import { logout } from '@/app/store/authSlice';
 import {
   createNews,
   uploadNewsMedia,
-  SportType,
+  NewsType,
   MediaType,
   type CreateNewsRequest,
 } from '@/lib/hooks/useNews';
@@ -21,7 +21,7 @@ export default function NewNewsPage() {
   const [formData, setFormData] = useState<CreateNewsRequest>({
     title: '',
     content: '',
-    sportType: SportType.Hepsi,
+    newsType: NewsType.Bilgilendirme,
     isActive: true,
   });
 
@@ -46,8 +46,8 @@ export default function NewNewsPage() {
     if (type === 'checkbox') {
       const checked = (e.target as HTMLInputElement).checked;
       setFormData((prev) => ({ ...prev, [name]: checked }));
-    } else if (name === 'sportType') {
-      setFormData((prev) => ({ ...prev, [name]: parseInt(value) as SportType }));
+    } else if (name === 'newsType') {
+      setFormData((prev) => ({ ...prev, [name]: parseInt(value) as NewsType }));
     } else {
       setFormData((prev) => ({ ...prev, [name]: value }));
     }
@@ -171,23 +171,23 @@ export default function NewNewsPage() {
                 />
               </div>
 
-              {/* Sport Type */}
+              {/* News Type */}
               <div>
-                <label htmlFor="sportType" className="block text-sm font-medium text-slate-700 mb-2">
-                  Spor Dalı *
+                <label htmlFor="newsType" className="block text-sm font-medium text-slate-700 mb-2">
+                  Haber Türü *
                 </label>
                 <select
-                  id="sportType"
-                  name="sportType"
-                  value={formData.sportType}
+                  id="newsType"
+                  name="newsType"
+                  value={formData.newsType}
                   onChange={handleInputChange}
                   className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
                   required
                 >
-                  <option value={SportType.Hepsi}>Hepsi (Genel)</option>
-                  <option value={SportType.Okculuk}>Okçuluk</option>
-                  <option value={SportType.Basketbol}>Basketbol</option>
-                  <option value={SportType.Voleybol}>Voleybol</option>
+                  <option value={NewsType.Bilgilendirme}>Bilgilendirme</option>
+                  <option value={NewsType.SkorTakibi}>Skor Takibi</option>
+                  <option value={NewsType.OzelGun}>Özel Gün</option>
+                  <option value={NewsType.SosyalSorumluluk}>Sosyal Sorumluluk</option>
                 </select>
               </div>
 

@@ -4,10 +4,10 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import SponsorSidebar from '@/app/components/common/SponsorSidebar';
 import HeroBand from '@/app/components/sections/HeroBand';
-import { useNewsList, SportType, formatDate } from '@/lib/hooks/useNews';
+import { useNewsList, NewsType, formatDate } from '@/lib/hooks/useNews';
 
 export default function HaberlerPage() {
-  const [selectedCategory, setSelectedCategory] = useState<SportType | undefined>(undefined);
+  const [selectedCategory, setSelectedCategory] = useState<NewsType | undefined>(undefined);
   const [pageNumber, setPageNumber] = useState(1);
   const pageSize = 9;
 
@@ -32,9 +32,10 @@ export default function HaberlerPage() {
 
   const categories = [
     { id: undefined, name: 'Tümü', icon: '📰' },
-    { id: SportType.Okculuk, name: 'Okçuluk', icon: '🎯' },
-    { id: SportType.Basketbol, name: 'Basketbol', icon: '🏀' },
-    { id: SportType.Voleybol, name: 'Voleybol', icon: '🏐' },
+    { id: NewsType.Bilgilendirme, name: 'Bilgilendirme', icon: '📢' },
+    { id: NewsType.SkorTakibi, name: 'Skor Takibi', icon: '🏆' },
+    { id: NewsType.OzelGun, name: 'Özel Gün', icon: '🎉' },
+    { id: NewsType.SosyalSorumluluk, name: 'Sosyal Sorumluluk', icon: '🤝' },
   ];
 
   if (!isMounted) {
@@ -134,7 +135,7 @@ export default function HaberlerPage() {
                     <div className="p-8">
                       <div className="flex items-center gap-4 mb-4">
                         <span className="bg-gradient-to-r from-[#EAB308] to-[#FACC15] text-slate-900 px-3 py-1 rounded-full text-sm font-medium shadow-md">
-                          {allNews[0].sportTypeName}
+                          {allNews[0].newsTypeName}
                         </span>
                         <span className="text-slate-500 text-sm">{formatDate(allNews[0].publishedAt)}</span>
                       </div>
@@ -202,7 +203,7 @@ export default function HaberlerPage() {
                           <div className="p-6 flex flex-col flex-grow">
                             <div className="flex items-center gap-3 mb-3 flex-shrink-0">
                               <span className="bg-gradient-to-r from-[#EAB308] to-[#FACC15] text-slate-900 px-3 py-1 rounded-full text-xs font-medium shadow-md">
-                                {news.sportTypeName}
+                                {news.newsTypeName}
                               </span>
                               <span className="text-slate-500 text-sm">{formatDate(news.publishedAt)}</span>
                             </div>

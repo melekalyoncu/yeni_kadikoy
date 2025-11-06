@@ -9,7 +9,7 @@ import {
   useNewsList,
   deleteNews,
   deleteNewsMedia,
-  SportType,
+  NewsType,
   MediaType,
   formatDate,
 } from '@/lib/hooks/useNews';
@@ -20,7 +20,7 @@ export default function AdminNewsPage() {
   const { isAuthenticated } = useAppSelector((state) => state.auth);
 
   // Filters
-  const [sportTypeFilter, setSportTypeFilter] = useState<SportType | undefined>(undefined);
+  const [newsTypeFilter, setNewsTypeFilter] = useState<NewsType | undefined>(undefined);
   const [isActiveFilter, setIsActiveFilter] = useState<boolean | undefined>(true);
   const [pageNumber, setPageNumber] = useState(1);
   const pageSize = 10;
@@ -30,7 +30,7 @@ export default function AdminNewsPage() {
 
   // Fetch news with SWR
   const { news, totalCount, totalPages, isLoading, isError, mutate } = useNewsList(
-    sportTypeFilter,
+    newsTypeFilter,
     isActiveFilter,
     pageNumber,
     pageSize
@@ -117,21 +117,21 @@ export default function AdminNewsPage() {
         <div className="bg-white rounded-lg shadow-sm border border-slate-200 p-6 mb-6">
           <div className="flex flex-wrap items-center gap-4">
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">Spor Dalı</label>
+              <label className="block text-sm font-medium text-slate-700 mb-2">Haber Türü</label>
               <select
-                value={sportTypeFilter ?? ''}
+                value={newsTypeFilter ?? ''}
                 onChange={(e) => {
                   const val = e.target.value;
-                  setSportTypeFilter(val === '' ? undefined : Number(val) as SportType);
+                  setNewsTypeFilter(val === '' ? undefined : Number(val) as NewsType);
                   setPageNumber(1);
                 }}
                 className="px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
               >
                 <option value="">Tümü</option>
-                <option value={SportType.Hepsi}>Genel</option>
-                <option value={SportType.Okculuk}>Okçuluk</option>
-                <option value={SportType.Basketbol}>Basketbol</option>
-                <option value={SportType.Voleybol}>Voleybol</option>
+                <option value={NewsType.Bilgilendirme}>Bilgilendirme</option>
+                <option value={NewsType.SkorTakibi}>Skor Takibi</option>
+                <option value={NewsType.OzelGun}>Özel Gün</option>
+                <option value={NewsType.SosyalSorumluluk}>Sosyal Sorumluluk</option>
               </select>
             </div>
 
@@ -198,7 +198,7 @@ export default function AdminNewsPage() {
               <thead className="bg-slate-50 border-b border-slate-200">
                 <tr>
                   <th className="px-6 py-3 text-left text-xs font-medium text-slate-700 uppercase">Başlık</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-slate-700 uppercase">Spor Dalı</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-slate-700 uppercase">Haber Türü</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-slate-700 uppercase">Durum</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-slate-700 uppercase">Tarih</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-slate-700 uppercase">Medya</th>
@@ -215,7 +215,7 @@ export default function AdminNewsPage() {
                       </td>
                       <td className="px-6 py-4">
                         <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                          {item.sportTypeName}
+                          {item.newsTypeName}
                         </span>
                       </td>
                       <td className="px-6 py-4">

@@ -6,15 +6,13 @@ import ProgramCard from '@/app/components/branch/ProgramCard';
 
 export default function OkculukPage() {
   const teams = [
-    { id: 1, name: 'U12 Okçuluk Takımı', ageRange: '10-12 Yaş', description: 'Okçuluk sporuna yeni başlayan çocuklarımız için temel eğitim programı', schedule: 'Pazartesi, Çarşamba • 16:00-18:00' },
-    { id: 2, name: 'U14 Okçuluk Takımı', ageRange: '12-14 Yaş', description: 'Orta seviye okçuluk eğitimi ve turnuva hazırlığı', schedule: 'Salı, Perşembe • 16:00-18:00' },
-    { id: 3, name: 'U16 Okçuluk Takımı', ageRange: '14-16 Yaş', description: 'İleri seviye okçuluk eğitimi ve profesyonel hazırlık', schedule: 'Pazartesi, Çarşamba • 18:00-20:00' },
-    { id: 4, name: 'U18 Okçuluk Takımı', ageRange: '16-18 Yaş', description: 'Profesyonel okçuluk eğitimi ve ulusal müsabakalar', schedule: 'Salı, Perşembe • 18:00-20:00' },
+    { id: 1, name: 'Küçükler', ageRange: '7-14 Yaş', description: 'Okçuluk sporuna yeni başlayan çocuklarımız için temel eğitim programı. Bireysel ve takımsal branşlarda yer alıyoruz.', schedule: 'Hafta içi' },
+    { id: 2, name: 'Yıldızlar', ageRange: '14-16 Yaş', description: 'Orta seviye okçuluk eğitimi ve turnuva hazırlığı. Bireysel ve takımsal branşlarda yer alıyoruz.', schedule: 'Hafta içi' },
+    { id: 3, name: 'Gençler', ageRange: '18-30 Yaş', description: 'İleri seviye okçuluk eğitimi ve profesyonel hazırlık. Bireysel ve takımsal branşlarda yer alıyoruz.', schedule: 'Hafta içi' },
   ];
 
   const schools = [
-    { id: 1, name: 'Yaz Okçuluk Okulu', period: 'Haziran - Ağustos', description: 'Yaz aylarında yoğun okçuluk eğitimi ve kamp programı', ages: '8-16 Yaş' },
-    { id: 2, name: 'Hafta Sonu Okçuluk Okulu', period: 'Yıl Boyu', description: 'Hafta sonları okçuluk öğrenmek isteyenler için', ages: '8-18 Yaş' },
+    { id: 1, name: 'Okçuluk Eğitim Programı', period: 'Yıl Boyu', description: 'Bireysel ve takımsal branşlarda profesyonel okçuluk eğitimi. 7-30 yaş arası tüm sporcular için.', ages: '7-30 Yaş' },
   ];
 
   return (
@@ -29,7 +27,7 @@ export default function OkculukPage() {
         border="border-emerald-700/50"
         primary={{ href: "/kayit", label: "Kayıt Ol" }}
         secondary={{ href: "/iletisim", label: "Bilgi Al" }}
-        statChip="4 takım • 2 spor okulu"
+        statChip="3 kategori • 7-30 yaş"
       />
 
       {/* Main Content */}

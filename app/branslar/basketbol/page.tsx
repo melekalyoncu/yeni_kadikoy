@@ -6,15 +6,23 @@ import ProgramCard from '@/app/components/branch/ProgramCard';
 
 export default function BasketbolPage() {
   const teams = [
-    { id: 1, name: 'U12 Basketbol Takımı', ageRange: '10-12 Yaş', description: 'Basketbol sporuna yeni başlayan çocuklarımız için temel eğitim programı', schedule: 'Pzt, Çrş, Cum • 15:00-17:00' },
-    { id: 2, name: 'U14 Basketbol Takımı', ageRange: '12-14 Yaş', description: 'Orta seviye basketbol eğitimi ve turnuva hazırlığı', schedule: 'Salı, Perş, Cts • 15:00-17:00' },
-    { id: 3, name: 'U16 Basketbol Takımı', ageRange: '14-16 Yaş', description: 'İleri seviye basketbol eğitimi ve profesyonel hazırlık', schedule: 'Pzt, Çrş, Cum • 17:00-19:00' },
-    { id: 4, name: 'U18 Basketbol Takımı', ageRange: '16-18 Yaş', description: 'Profesyonel basketbol eğitimi ve lig müsabakaları', schedule: 'Salı, Perş, Cts • 17:00-19:00' },
+    { id: 1, name: 'U10', ageRange: '10 Yaş', description: 'Basketbol sporuna yeni başlayan çocuklarımız için temel eğitim programı', schedule: 'Cumartesi, Pazar' },
+    { id: 2, name: 'U14', ageRange: '14 Yaş', description: 'Orta seviye basketbol eğitimi ve turnuva hazırlığı', schedule: 'Cumartesi, Pazar' },
+    { id: 3, name: 'U18', ageRange: '18 Yaş', description: 'İleri seviye basketbol eğitimi ve profesyonel hazırlık', schedule: 'Cumartesi, Pazar' },
+    { id: 4, name: 'U21 Ümit Erkekler', ageRange: '21 Yaş', description: 'Ümit erkekler kategorisi', schedule: 'Cumartesi, Pazar' },
+    { id: 5, name: 'A Erkek (Büyük Erkekler)', ageRange: 'Yetişkin', description: 'Büyük erkekler kategorisi', schedule: 'Cumartesi, Pazar' },
+    { id: 6, name: 'EBBL', ageRange: 'Çeşitli', description: 'EBBL ligi takımı', schedule: 'Cumartesi, Pazar' },
+    { id: 7, name: 'Kadınlar', ageRange: 'Yetişkin', description: 'Kadın basketbol takımı', schedule: 'Cumartesi, Pazar' },
+    { id: 8, name: 'KBBL (Kadın Basketbol)', ageRange: 'Yetişkin', description: 'Kadın Basketbol ligi takımı', schedule: 'Cumartesi, Pazar' },
   ];
 
   const schools = [
-    { id: 1, name: 'Yaz Basketbol Okulu', period: 'Haziran - Ağustos', description: 'Yaz aylarında yoğun basketbol eğitimi ve kamp programı', ages: '8-16 Yaş' },
-    { id: 2, name: 'Hafta Sonu Basketbol Okulu', period: 'Yıl Boyu', description: 'Hafta sonları basketbol öğrenmek isteyenler için', ages: '8-18 Yaş' },
+    { id: 1, name: 'Basketbol Spor Okulları', period: 'Yıl Boyu', description: 'Cumartesi ve Pazar günleri antrenmanlar. Her antrenmanda sahada 3 antrenör bulunur. Kız ve erkek takım grupları ayrı çalışır.', ages: '6-17 Yaş' },
+  ];
+
+  const coaches = [
+    { name: 'Arkın Belek', role: 'Baş Antrenör', description: 'A takım ve altyapılar' },
+    { name: 'Türkay Çakıroğlu', role: 'Bireysel Performans Koçu (PT)', description: 'Performans antrenmanları' },
   ];
 
   return (
@@ -102,6 +110,26 @@ export default function BasketbolPage() {
                 ))}
               </div>
             </section>
+
+            {/* Coaches */}
+            <InfoSection title="Teknik Kadro">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                {coaches.map((coach, i) => (
+                  <div key={i} className="bg-gradient-to-br from-orange-50 to-white rounded-xl shadow-sm border border-orange-200 p-6 hover:shadow-md transition-shadow">
+                    <div className="flex items-start gap-4">
+                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-orange-600 to-orange-800 flex items-center justify-center text-white text-xl font-bold flex-shrink-0">
+                        {coach.name.charAt(0)}
+                      </div>
+                      <div>
+                        <h4 className="font-bold text-slate-900 text-lg mb-1">{coach.name}</h4>
+                        <p className="text-orange-700 font-semibold text-sm mb-2">{coach.role}</p>
+                        <p className="text-slate-600 text-sm">{coach.description}</p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </InfoSection>
 
             {/* Facilities */}
             <InfoSection title="Tesislerimiz">

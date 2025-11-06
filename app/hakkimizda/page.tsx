@@ -83,20 +83,20 @@ export default function HakkimizdaPage() {
               <h2 className="text-3xl font-bold text-slate-800 mb-6">Tarihçemiz</h2>
               <div className="space-y-6">
                 <div className="border-l-4 border-[#EAB308] pl-6 py-2">
-                  <h3 className="font-bold text-xl text-slate-900 mb-2">2020</h3>
-                  <p className="text-slate-700">Kulübümüz kuruldu ve ilk branş olarak voleybol başladı.</p>
+                  <h3 className="font-bold text-xl text-slate-900 mb-2">1960-1970'ler</h3>
+                  <p className="text-slate-700">Kulübümüzün kökleri 1960'lı ve 1970'li yıllara dayanan tarihi Kadıköy Spor'a uzanmaktadır. Sarı, lacivert, siyah ve beyaz renklerimiz bu köklü geçmişten gelmektedir.</p>
                 </div>
                 <div className="border-l-4 border-[#EAB308] pl-6 py-2">
-                  <h3 className="font-bold text-xl text-slate-900 mb-2">2021</h3>
-                  <p className="text-slate-700">Basketbol branşı açıldı ve modern saha hizmete girdi.</p>
+                  <h3 className="font-bold text-xl text-slate-900 mb-2">20 Temmuz 2023</h3>
+                  <p className="text-slate-700">Kulübümüz basketbol ve voleybol branşlarında yeniden faaliyet göstermeye başladı. Tarihi Kadıköy Spor'un devamı olarak yeni bir sayfa açıldı.</p>
                 </div>
                 <div className="border-l-4 border-[#EAB308] pl-6 py-2">
-                  <h3 className="font-bold text-xl text-slate-900 mb-2">2022</h3>
-                  <p className="text-slate-700">Okçuluk eklendi ve ilk ulusal dereceler geldi.</p>
+                  <h3 className="font-bold text-xl text-slate-900 mb-2">Temmuz 2025</h3>
+                  <p className="text-slate-700">Okçuluk branşı kulübümüz branşları arasına katıldı. Şu an aktif olarak 105 lisanslı ve lisansı olmayan amatör altyapı sporcusuna sahibiz.</p>
                 </div>
                 <div className="border-l-4 border-[#EAB308] pl-6 py-2">
-                  <h3 className="font-bold text-xl text-slate-900 mb-2">2023–2025</h3>
-                  <p className="text-slate-700">Tüm branşlarda başarılar; üye sayısı 500’ü aştı.</p>
+                  <h3 className="font-bold text-xl text-slate-900 mb-2">Bugün</h3>
+                  <p className="text-slate-700">Voleybol, basketbol ve okçuluk branşlarında profesyonel eğitim vererek geleceğin şampiyonlarını yetiştiriyoruz. 105 aktif sporcumuzla büyümeye devam ediyoruz.</p>
                 </div>
               </div>
             </section>
@@ -136,18 +136,18 @@ export default function HakkimizdaPage() {
               >
                 {[
                   {
-                    name: "Ahmet Yılmaz",
+                    name: "Filiz Belek",
                     role: "Kulüp Başkanı",
-                    photoUrl: "", // örn: "/images/yonetim/ahmet.jpg"
+                    photoUrl: "",
                   },
                   {
-                    name: "Mehmet Demir",
-                    role: "Genel Koordinatör",
-                    photoUrl: "", // eğer yoksa boş bırak
+                    name: "Arkın Belek",
+                    role: "Basketbol Baş Antrenörü",
+                    photoUrl: "",
                   },
                   {
-                    name: "Ayşe Kaya",
-                    role: "Spor Direktörü",
+                    name: "Yasemin Güven",
+                    role: "Voleybol Hocası",
                     photoUrl: "",
                   },
                 ].map((p) => {

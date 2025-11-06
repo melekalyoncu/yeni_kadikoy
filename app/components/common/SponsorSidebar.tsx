@@ -26,15 +26,35 @@ export default function SponsorSidebar({
     placement,
     true,
     1,
-    maxSponsors
+    100 // Fetch more sponsors to enable rotation
   );
 
   const [isMounted, setIsMounted] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
+
   useEffect(() => {
     setIsMounted(true);
   }, []);
 
-  const sponsors: Sponsor[] = isMounted
+  // Auto-rotate sponsors every 5 seconds
+  useEffect(() => {
+    if (!isMounted || apiSponsors.length <= maxSponsors) return;
+
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => {
+        const nextIndex = prev + maxSponsors;
+        // If we've reached the end, start over
+        if (nextIndex >= apiSponsors.length) {
+          return 0;
+        }
+        return nextIndex;
+      });
+    }, 5000); // Rotate every 5 seconds
+
+    return () => clearInterval(interval);
+  }, [isMounted, apiSponsors.length, maxSponsors]);
+
+  const allSponsors: Sponsor[] = isMounted
     ? apiSponsors.map((s) => ({
         id: s.id,
         name: s.name,
@@ -43,6 +63,9 @@ export default function SponsorSidebar({
         url: s.websiteUrl || undefined,
       }))
     : [];
+
+  // Get the current slice of sponsors to display
+  const sponsors = allSponsors.slice(currentIndex, currentIndex + maxSponsors);
 
   return (
     <aside
@@ -214,23 +237,45 @@ function AdSlot() {
     0, // Placement.Banner
     true,
     1,
-    1
+    100 // Fetch all banner sponsors
   );
 
   const [mounted, setMounted] = useState(false);
+  const [currentBannerIndex, setCurrentBannerIndex] = useState(0);
+
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  const ad: Sponsor | undefined = mounted
-    ? bannerSponsors.slice(0, 1).map((s) => ({
+  // Auto-rotate banner sponsors every 7 seconds
+  useEffect(() => {
+    if (!mounted || bannerSponsors.length <= 1) return;
+
+    const interval = setInterval(() => {
+      setCurrentBannerIndex((prev) => {
+        const nextIndex = prev + 1;
+        // If we've reached the end, start over
+        if (nextIndex >= bannerSponsors.length) {
+          return 0;
+        }
+        return nextIndex;
+      });
+    }, 7000); // Rotate every 7 seconds
+
+    return () => clearInterval(interval);
+  }, [mounted, bannerSponsors.length]);
+
+  const allBannerAds: Sponsor[] = mounted
+    ? bannerSponsors.map((s) => ({
         id: s.id,
         name: s.name,
         photo: s.photoUrl || undefined,
         logo: s.logoUrl || s.photoUrl || undefined,
         url: s.websiteUrl || undefined,
-      }))[0]
-    : undefined;
+      }))
+    : [];
+
+  const ad: Sponsor | undefined = allBannerAds[currentBannerIndex];
 
   return (
     <section

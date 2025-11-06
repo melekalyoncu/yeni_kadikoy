@@ -8,7 +8,7 @@ export default function Footer() {
     instagram: 'https://instagram.com/yenikadikoysk',
     facebook: 'https://facebook.com/yenikadikoysk',
     twitter: 'https://twitter.com/yenikadikoysk',
-    email: 'mailto:info@kadikoysporkulubu.com',
+    email: 'mailto:yenikadikoysporkulubu@gmail.com',
   };
 
   return (
@@ -195,7 +195,9 @@ export default function Footer() {
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-[#FFD700]">📞</span>
-                <span>+90 XXX XXX XX XX</span>
+                <a href="tel:+905352279131" className="hover:text-[#FFD700] transition">
+                  0535 227 91 31
+                </a>
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-[#FFD700]">✉️</span>
@@ -203,7 +205,7 @@ export default function Footer() {
                   href={socialLinks.email}
                   className="hover:text-[#FFD700] transition"
                 >
-                  info@kadikoysporkulubu.com
+                  yenikadikoysporkulubu@gmail.com
                 </a>
               </li>
             </ul>

@@ -5,11 +5,11 @@ import { apiClient } from '@/lib/api-client';
 // TYPES & INTERFACES
 // ============================================
 
-export enum SportType {
-  Hepsi = 0,
-  Okculuk = 1,
-  Basketbol = 2,
-  Voleybol = 3,
+export enum NewsType {
+  Bilgilendirme = 0,
+  SkorTakibi = 1,
+  OzelGun = 2,
+  SosyalSorumluluk = 3,
 }
 
 export enum MediaType {
@@ -32,8 +32,8 @@ export interface NewsItem {
   id: number;
   title: string;
   content: string;
-  sportType: SportType;
-  sportTypeName: string;
+  newsType: NewsType;
+  newsTypeName: string;
   publishedAt: string;
   createdAt: string;
   updatedAt: string | null;
@@ -52,7 +52,7 @@ export interface NewsListResponse {
 export interface CreateNewsRequest {
   title: string;
   content: string;
-  sportType: SportType;
+  newsType: NewsType;
   publishedAt?: string;
   isActive?: boolean;
 }
@@ -60,7 +60,7 @@ export interface CreateNewsRequest {
 export interface UpdateNewsRequest {
   title?: string;
   content?: string;
-  sportType?: SportType;
+  newsType?: NewsType;
   publishedAt?: string;
   isActive?: boolean;
 }
@@ -86,25 +86,25 @@ export interface ApiResponse<T = any> {
  * Haber listesini getirir
  */
 export async function fetchNewsList(
-  sportType?: SportType,
+  newsType?: NewsType,
   isActive?: boolean,
   pageNumber: number = 1,
   pageSize: number = 10
 ): Promise<NewsListResponse> {
   const params = new URLSearchParams();
 
-  if (sportType !== undefined) params.append('sportType', sportType.toString());
+  if (newsType !== undefined) params.append('newsType', newsType.toString());
   if (isActive !== undefined) params.append('isActive', isActive.toString());
   params.append('pageNumber', pageNumber.toString());
   params.append('pageSize', pageSize.toString());
 
   const response = await apiClient.get<NewsListResponse>(`/News?${params.toString()}`);
 
-  // Add sportTypeName and mediaTypeName to each news item
+  // Add newsTypeName and mediaTypeName to each news item
   const data = response.data;
   data.data = data.data.map(news => ({
     ...news,
-    sportTypeName: getSportTypeName(news.sportType),
+    newsTypeName: getNewsTypeName(news.newsType),
     mediaFiles: news.mediaFiles.map(media => ({
       ...media,
       mediaTypeName: getMediaTypeName(media.mediaType)
@@ -121,10 +121,10 @@ export async function fetchNewsById(id: number): Promise<NewsItem> {
   const response = await apiClient.get<NewsItem>(`/News/${id}`);
   const news = response.data;
 
-  // Add sportTypeName and mediaTypeName
+  // Add newsTypeName and mediaTypeName
   return {
     ...news,
-    sportTypeName: getSportTypeName(news.sportType),
+    newsTypeName: getNewsTypeName(news.newsType),
     mediaFiles: news.mediaFiles.map(media => ({
       ...media,
       mediaTypeName: getMediaTypeName(media.mediaType)
@@ -191,6 +191,29 @@ export async function deleteNewsMedia(mediaId: number): Promise<ApiResponse> {
   return response.data;
 }
 
+/**
+ * Sosyal sorumluluk haberine fotoğraf yükler
+ */
+export async function uploadSocialResponsibilityPhoto(
+  newsId: number,
+  file: File
+): Promise<ApiResponse<NewsMediaFile>> {
+  const formData = new FormData();
+  formData.append('file', file);
+
+  const response = await apiClient.post<ApiResponse<NewsMediaFile>>(
+    `/News/social-responsibility/${newsId}/photo`,
+    formData,
+    {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    }
+  );
+
+  return response.data;
+}
+
 // ============================================
 // SWR HOOKS
 // ============================================
@@ -199,14 +222,14 @@ export async function deleteNewsMedia(mediaId: number): Promise<ApiResponse> {
  * Haber listesi için SWR hook
  */
 export function useNewsList(
-  sportType?: SportType,
+  newsType?: NewsType,
   isActive?: boolean,
   pageNumber: number = 1,
   pageSize: number = 10
 ) {
   const params = new URLSearchParams();
-  
-  if (sportType !== undefined) params.append('sportType', sportType.toString());
+
+  if (newsType !== undefined) params.append('newsType', newsType.toString());
   if (isActive !== undefined) params.append('isActive', isActive.toString());
   params.append('pageNumber', pageNumber.toString());
   params.append('pageSize', pageSize.toString());
@@ -215,7 +238,7 @@ export function useNewsList(
 
   const { data, error, isLoading, mutate } = useSWR<NewsListResponse>(
     key,
-    () => fetchNewsList(sportType, isActive, pageNumber, pageSize),
+    () => fetchNewsList(newsType, isActive, pageNumber, pageSize),
     {
       revalidateOnFocus: false,
       revalidateOnReconnect: true,
@@ -264,18 +287,18 @@ export function useNewsDetail(id: number | null) {
 // ============================================
 
 /**
- * SportType enum'ını Türkçe metne çevirir
+ * NewsType enum'ını Türkçe metne çevirir
  */
-export function getSportTypeName(sportType: SportType): string {
-  switch (sportType) {
-    case SportType.Hepsi:
-      return 'Hepsi';
-    case SportType.Okculuk:
-      return 'Okçuluk';
-    case SportType.Basketbol:
-      return 'Basketbol';
-    case SportType.Voleybol:
-      return 'Voleybol';
+export function getNewsTypeName(newsType: NewsType): string {
+  switch (newsType) {
+    case NewsType.Bilgilendirme:
+      return 'Bilgilendirme';
+    case NewsType.SkorTakibi:
+      return 'Skor Takibi';
+    case NewsType.OzelGun:
+      return 'Özel Gün';
+    case NewsType.SosyalSorumluluk:
+      return 'Sosyal Sorumluluk';
     default:
       return 'Bilinmeyen';
   }

@@ -3,15 +3,20 @@ import SponsorSidebar from '@/app/components/common/SponsorSidebar';
 
 export default function VoleybolPage() {
   const teams = [
-    { id: 1, name: 'U12 Voleybol Takımı', ageRange: '10-12 Yaş', description: 'Voleybol sporuna yeni başlayan çocuklarımız için temel eğitim programı', schedule: 'Pzt, Çrş, Cum • 16:00-18:00' },
-    { id: 2, name: 'U14 Voleybol Takımı', ageRange: '12-14 Yaş', description: 'Orta seviye voleybol eğitimi ve turnuva hazırlığı', schedule: 'Salı, Perş, Cts • 16:00-18:00' },
-    { id: 3, name: 'U16 Voleybol Takımı', ageRange: '14-16 Yaş', description: 'İleri seviye voleybol eğitimi ve profesyonel hazırlık', schedule: 'Pzt, Çrş, Cum • 18:00-20:00' },
-    { id: 4, name: 'U18 Voleybol Takımı', ageRange: '16-18 Yaş', description: 'Profesyonel voleybol eğitimi ve lig müsabakaları', schedule: 'Salı, Perş, Cts • 18:00-20:00' },
+    { id: 1, name: 'Mini Grup', ageRange: '6-9 Yaş', description: 'Voleybol sporuna ilk adım atan çocuklarımız için temel eğitim', schedule: 'Hafta içi' },
+    { id: 2, name: 'Kız-Erkek Voleybol', ageRange: '6-12 Yaş', description: 'Temel voleybol becerileri ve oyun kuralları eğitimi', schedule: 'Hafta içi' },
+    { id: 3, name: 'Gelişim Takımları', ageRange: '9-17 Yaş', description: 'Yıllık 11 aylık antrenman programı, özel/resmi maçlar ve özel turnuva katılım grubu', schedule: 'Yıl boyu' },
+    { id: 4, name: 'Altyapı Takımları (9-13 yaş)', ageRange: '9-13 Yaş', description: 'Genç yaş grubu altyapı takımı', schedule: 'Hafta içi' },
+    { id: 5, name: 'Altyapı Takımları (13-18 yaş)', ageRange: '13-18 Yaş', description: 'Büyük yaş grubu altyapı takımı', schedule: 'Hafta içi' },
   ];
 
   const schools = [
-    { id: 1, name: 'Yaz Voleybol Okulu', period: 'Haziran - Ağustos', description: 'Yaz aylarında yoğun voleybol eğitimi ve kamp programı', ages: '8-16 Yaş' },
-    { id: 2, name: 'Hafta Sonu Voleybol Okulu', period: 'Yıl Boyu', description: 'Hafta sonları voleybol öğrenmek isteyenler için', ages: '8-18 Yaş' },
+    { id: 1, name: 'Voleybol Okulları', period: 'Yıl Boyu', description: 'Lisanssız başlangıç gruplarıdır. Sporcular geliştirilip uygun görülenler lisanslandırılarak liglere kazandırılır.', ages: '6-12 Yaş' },
+  ];
+
+  const coaches = [
+    { name: 'Yasemin Güven', role: 'Voleybol Hocası', description: 'A takım ve altyapılar sorumlusu' },
+    { name: 'Zeynep Belek', role: 'Teknik Koordinatör', description: 'Teknik koordinasyon ve planlama' },
   ];
 
   return (
@@ -118,6 +123,27 @@ export default function VoleybolPage() {
                       >
                         Kayıt Ol
                       </Link>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            {/* Coaches */}
+            <section className="mb-8 md:mb-12 bg-slate-50 rounded-xl shadow-sm border border-slate-200 p-6 md:p-8">
+              <h2 className="text-2xl md:text-3xl font-bold text-slate-800 mb-4 md:mb-6">Teknik Kadro</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                {coaches.map((coach, i) => (
+                  <div key={i} className="bg-gradient-to-br from-yellow-50 to-white rounded-xl shadow-sm border border-yellow-200 p-6 hover:shadow-md transition-shadow">
+                    <div className="flex items-start gap-4">
+                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-yellow-500 to-amber-600 flex items-center justify-center text-white text-xl font-bold flex-shrink-0">
+                        {coach.name.charAt(0)}
+                      </div>
+                      <div>
+                        <h4 className="font-bold text-slate-900 text-lg mb-1">{coach.name}</h4>
+                        <p className="text-amber-700 font-semibold text-sm mb-2">{coach.role}</p>
+                        <p className="text-slate-600 text-sm">{coach.description}</p>
+                      </div>
                     </div>
                   </div>
                 ))}
