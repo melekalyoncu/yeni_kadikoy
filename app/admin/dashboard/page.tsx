@@ -52,6 +52,15 @@ export default function AdminDashboard() {
       gradient: 'from-yellow-500 to-amber-600',
       stats: 'Sponsorlar',
     },
+    {
+      id: 3,
+      title: 'Kayıt Yönetimi',
+      description: 'Sporcu kayıtlarını görüntüle ve onayla',
+      icon: '📋',
+      href: '/admin/kayitlar',
+      gradient: 'from-green-600 to-emerald-700',
+      stats: 'Kayıtlar',
+    },
   ];
 
   return (

@@ -4,6 +4,7 @@ import { useState } from 'react';
 import SponsorSidebar from '@/app/components/common/SponsorSidebar';
 import HeroBand from '@/app/components/sections/HeroBand';
 import CTAButton from '@/app/components/ui/CTAButton';
+import { createRegistration } from '@/lib/hooks/useRegistration';
 
 export default function KayitPage() {
   const [formData, setFormData] = useState({
@@ -19,21 +20,50 @@ export default function KayitPage() {
     healthInfo: '',
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    alert('Kayıt başvurunuz alındı! En kısa sürede sizinle iletişime geçeceğiz.');
-    setFormData({
-      studentName: '',
-      birthDate: '',
-      parentName: '',
-      email: '',
-      phone: '',
-      address: '',
-      branch: '',
-      ageGroup: '',
-      program: '',
-      healthInfo: '',
-    });
+    setIsSubmitting(true);
+
+    try {
+      // API'ye gönderilecek veriyi hazırla
+      const registrationData = {
+        athleteFullName: formData.studentName,
+        birthDate: new Date(formData.birthDate).toISOString(),
+        parentFullName: formData.parentName,
+        parentPhone: formData.phone,
+        parentEmail: formData.email,
+        parentAddress: formData.address,
+        branch: parseInt(formData.branch),
+        ageGroup: parseInt(formData.ageGroup),
+        programType: parseInt(formData.program),
+        healthNotes: formData.healthInfo || '',
+      };
+
+      await createRegistration(registrationData);
+
+      alert('Kayıt başvurunuz başarıyla alındı! En kısa sürede sizinle iletişime geçeceğiz.');
+
+      // Formu sıfırla
+      setFormData({
+        studentName: '',
+        birthDate: '',
+        parentName: '',
+        email: '',
+        phone: '',
+        address: '',
+        branch: '',
+        ageGroup: '',
+        program: '',
+        healthInfo: '',
+      });
+    } catch (error: any) {
+      console.error('Kayıt hatası:', error);
+      alert(error.message || 'Kayıt başvurusu gönderilemedi. Lütfen tekrar deneyin.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleChange = (
@@ -201,9 +231,9 @@ export default function KayitPage() {
                           className="w-full px-4 py-2 border border-slate-300 rounded-lg bg-white text-slate-800 focus:ring-2 focus:ring-slate-800 focus:border-transparent transition"
                         >
                           <option value="">Seçiniz</option>
-                          <option value="voleybol">🏐 Voleybol</option>
-                          <option value="basketbol">🏀 Basketbol</option>
-                          <option value="okculuk">🎯 Okçuluk</option>
+                          <option value="1">🎯 Okçuluk</option>
+                          <option value="2">🏀 Basketbol</option>
+                          <option value="3">🏐 Voleybol</option>
                         </select>
                       </div>
                       <div>
@@ -219,10 +249,10 @@ export default function KayitPage() {
                           className="w-full px-4 py-2 border border-slate-300 rounded-lg bg-white text-slate-800 focus:ring-2 focus:ring-slate-800 focus:border-transparent transition"
                         >
                           <option value="">Seçiniz</option>
-                          <option value="u12">U12 (10–12)</option>
-                          <option value="u14">U14 (12–14)</option>
-                          <option value="u16">U16 (14–16)</option>
-                          <option value="u18">U18 (16–18)</option>
+                          <option value="1">U12 (10–12)</option>
+                          <option value="2">U14 (12–14)</option>
+                          <option value="3">U16 (14–16)</option>
+                          <option value="4">U18 (16–18)</option>
                         </select>
                       </div>
                       <div>
@@ -238,9 +268,9 @@ export default function KayitPage() {
                           className="w-full px-4 py-2 border border-slate-300 rounded-lg bg-white text-slate-800 focus:ring-2 focus:ring-slate-800 focus:border-transparent transition"
                         >
                           <option value="">Seçiniz</option>
-                          <option value="takim">Takım Antrenmanı</option>
-                          <option value="yaz">Yaz Spor Okulu</option>
-                          <option value="haftasonu">Hafta Sonu Okulu</option>
+                          <option value="1">Takım Antrenmanı</option>
+                          <option value="2">Yaz Spor Okulu</option>
+                          <option value="3">Hafta Sonu Okulu</option>
                         </select>
                       </div>
                     </div>
@@ -267,10 +297,11 @@ export default function KayitPage() {
                   <div className="pt-4 md:pt-6">
                     <button
                       type="submit"
-                      className="w-full md:w-auto bg-white text-slate-900 font-bold rounded-lg px-6 py-3 border border-slate-300 hover:shadow-md transition-all"
+                      disabled={isSubmitting}
+                      className="w-full md:w-auto bg-white text-slate-900 font-bold rounded-lg px-6 py-3 border border-slate-300 hover:shadow-md transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                       aria-label="Kayıt başvurusunu gönder"
                     >
-                      KAYIT BAŞVURUSU GÖNDER
+                      {isSubmitting ? 'GÖNDERİLİYOR...' : 'KAYIT BAŞVURUSU GÖNDER'}
                     </button>
                   </div>
                 </form>
